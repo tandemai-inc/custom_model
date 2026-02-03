@@ -321,7 +321,8 @@ def main():
         best_params,
         task=task,
         cv_folds=args.cv_folds,
-        random_state=args.random_state
+        random_state=args.random_state,
+        output_dir=args.output_dir
     )
     
     print(f"\n   CV Results:")

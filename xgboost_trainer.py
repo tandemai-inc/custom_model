@@ -153,7 +153,7 @@ def evaluate_model(model, X, y, task='regression'):
     return metrics
 
 
-def cross_validate_model(X, y, params, task='regression', cv_folds=5, random_state=42):
+def cross_validate_model(X, y, params, task='regression', cv_folds=5, random_state=42, output_dir=None):
     """
     Run cross-validation on model.
     
@@ -164,11 +164,15 @@ def cross_validate_model(X, y, params, task='regression', cv_folds=5, random_sta
         task: 'regression' or 'classification' (default: 'regression')
         cv_folds: Number of CV folds (default: 5)
         random_state: Random state for reproducibility
+        output_dir: Optional directory to save fold predictions
         
     Returns:
-        Dictionary with mean and std of CV scores
+        Dictionary with mean and std of CV scores and predictions
     """
     kf = KFold(n_splits=cv_folds, shuffle=True, random_state=random_state)
+    
+    # Store predictions for all folds
+    all_predictions = []
     
     if task == 'classification':
         accuracy_scores = []
@@ -189,6 +193,29 @@ def cross_validate_model(X, y, params, task='regression', cv_folds=5, random_sta
                 task=task,
                 verbose=False
             )
+            
+            # Get predictions
+            y_pred = model.predict(X_val_fold)
+            y_pred_proba = None
+            if hasattr(model, 'predict_proba'):
+                y_pred_proba = model.predict_proba(X_val_fold)[:, 1] if task == 'classification' else None
+            
+            # Store predictions
+            fold_predictions = pd.DataFrame({
+                'fold': fold,
+                'index': val_idx,
+                'y_true': y_val_fold.values,
+                'y_pred': y_pred
+            })
+            if y_pred_proba is not None:
+                fold_predictions['y_pred_proba'] = y_pred_proba
+            all_predictions.append(fold_predictions)
+            
+            # Save individual fold predictions if output_dir provided
+            if output_dir:
+                os.makedirs(output_dir, exist_ok=True)
+                fold_path = os.path.join(output_dir, f'cv_fold_{fold}_predictions.csv')
+                fold_predictions.to_csv(fold_path, index=False)
             
             # Evaluate
             metrics = evaluate_model(model, X_val_fold, y_val_fold, task=task)
@@ -223,6 +250,13 @@ def cross_validate_model(X, y, params, task='regression', cv_folds=5, random_sta
             results['roc_auc_std'] = np.std(roc_auc_scores)
             results['roc_auc_scores'] = roc_auc_scores
         
+        # Save combined predictions if output_dir provided
+        if output_dir and all_predictions:
+            combined_predictions = pd.concat(all_predictions, ignore_index=True)
+            combined_path = os.path.join(output_dir, 'cv_all_folds_predictions.csv')
+            combined_predictions.to_csv(combined_path, index=False)
+            print(f"  Combined CV predictions saved to {combined_path}")
+        
     else:
         # Regression
         r2_scores = []
@@ -243,6 +277,24 @@ def cross_validate_model(X, y, params, task='regression', cv_folds=5, random_sta
                 task=task,
                 verbose=False
             )
+            
+            # Get predictions
+            y_pred = model.predict(X_val_fold)
+            
+            # Store predictions
+            fold_predictions = pd.DataFrame({
+                'fold': fold,
+                'index': val_idx,
+                'y_true': y_val_fold.values,
+                'y_pred': y_pred
+            })
+            all_predictions.append(fold_predictions)
+            
+            # Save individual fold predictions if output_dir provided
+            if output_dir:
+                os.makedirs(output_dir, exist_ok=True)
+                fold_path = os.path.join(output_dir, f'cv_fold_{fold}_predictions.csv')
+                fold_predictions.to_csv(fold_path, index=False)
             
             # Evaluate
             metrics = evaluate_model(model, X_val_fold, y_val_fold, task=task)
@@ -272,6 +324,13 @@ def cross_validate_model(X, y, params, task='regression', cv_folds=5, random_sta
             'pearson_scores': pearson_scores,
             'spearman_scores': spearman_scores
         }
+        
+        # Save combined predictions if output_dir provided
+        if output_dir and all_predictions:
+            combined_predictions = pd.concat(all_predictions, ignore_index=True)
+            combined_path = os.path.join(output_dir, 'cv_all_folds_predictions.csv')
+            combined_predictions.to_csv(combined_path, index=False)
+            print(f"  Combined CV predictions saved to {combined_path}")
     
     return results
 
