@@ -17,9 +17,14 @@ ENV/
 
 # Results
 results/
+*_results/
+*_no_testset/
 *.json
 *.csv
 !requirements.txt
+*.log
+peptide_*.csv
+!peptide_sample_*.csv
 
 # IDE
 .vscode/
