@@ -61,9 +61,14 @@ def create_objective(X, y, task='regression', cv_folds=5, metric=None, random_st
             X_train_fold, X_val_fold = X.iloc[train_idx], X.iloc[val_idx]
             y_train_fold, y_val_fold = y.iloc[train_idx], y.iloc[val_idx]
             
-            # Handle NaN values
+            # Handle NaN, inf, and extreme values
+            X_train_fold = X_train_fold.replace([np.inf, -np.inf], np.nan)
+            X_val_fold = X_val_fold.replace([np.inf, -np.inf], np.nan)
             X_train_fold = X_train_fold.fillna(0)
             X_val_fold = X_val_fold.fillna(0)
+            # Clip extreme values
+            X_train_fold = X_train_fold.clip(lower=-1e10, upper=1e10)
+            X_val_fold = X_val_fold.clip(lower=-1e10, upper=1e10)
             
             # Create appropriate model type
             if task == 'classification':

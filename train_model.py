@@ -10,6 +10,7 @@ import argparse
 import json
 import os
 import sys
+import pickle
 from datetime import datetime
 import warnings
 warnings.filterwarnings('ignore')
@@ -24,6 +25,22 @@ from xgboost_trainer import (
 from feature_selection import (
     select_features_mutual_info, save_selected_features, load_selected_features
 )
+try:
+    from confidence_intervals import (
+        train_quantile_models, predict_with_confidence, calculate_prediction_intervals_cv
+    )
+    CONFIDENCE_AVAILABLE = True
+except ImportError:
+    CONFIDENCE_AVAILABLE = False
+    print("Warning: confidence_intervals module not available")
+try:
+    from confidence_intervals import (
+        train_quantile_models, predict_with_confidence, calculate_prediction_intervals_cv
+    )
+    CONFIDENCE_AVAILABLE = True
+except ImportError:
+    CONFIDENCE_AVAILABLE = False
+    print("Warning: confidence_intervals module not available")
 
 
 def main():
@@ -66,6 +83,12 @@ def main():
                        help='Random state for reproducibility (default: 42)')
     parser.add_argument('--skip_optuna', action='store_true',
                        help='Skip Optuna optimization and use default hyperparameters')
+    parser.add_argument('--confidence_intervals', action='store_true',
+                       help='Calculate confidence intervals for predictions (default: False, can be slow)')
+    parser.add_argument('--confidence_level', type=float, default=0.90,
+                       help='Confidence level for intervals (default: 0.90 for 90%% CI)')
+    parser.add_argument('--cache_features', action='store_true', default=True,
+                       help='Cache featurized data in results folder (default: True)')
     
     args = parser.parse_args()
     
@@ -135,21 +158,70 @@ def main():
         for class_val, count in class_counts.items():
             print(f"     Class {class_val}: {count} samples ({count/len(y)*100:.1f}%)")
     
-    # Step 2: Calculate features
-    print("\n2. Calculating features...")
-    try:
-        X = calculate_all_features(
-            smiles_list,
-            reduced_features_path=args.reduced_features,
-            include_map4=args.include_map4,
-            map4_dimensions=args.map4_dimensions
-        )
-        print(f"   Features calculated: {X.shape[1]}")
-    except Exception as e:
-        print(f"Error calculating features: {e}")
-        import traceback
-        traceback.print_exc()
-        return
+    # Step 2: Load or calculate features
+    print("\n2. Loading/calculating features...")
+    
+    # Check if CSV already contains feature columns (e.g., from concatenate_peptide_features.py)
+    metadata_cols = ['smiles', 'label']
+    if 'fold' in df.columns:
+        metadata_cols.append('fold')
+    
+    # Also exclude common label-like column names to prevent data leakage
+    label_like_patterns = ['permeability', 'pampa', 'caco2', 'mdck', 'rrck']
+    for col in df.columns:
+        col_lower = col.lower()
+        if any(pattern in col_lower for pattern in label_like_patterns) and col != 'label':
+            if col not in metadata_cols:
+                metadata_cols.append(col)
+                print(f"   Warning: Excluding potential label column from features: {col}")
+    
+    existing_feature_cols = [col for col in df.columns if col not in metadata_cols]
+    
+    if len(existing_feature_cols) > 0:
+        # Use pre-computed features from CSV
+        print(f"   Found {len(existing_feature_cols)} pre-computed features in CSV")
+        
+        # Check for embedding features
+        embedding_cols = [col for col in existing_feature_cols if 'embedding' in col.lower()]
+        molecular_cols = [col for col in existing_feature_cols if 'embedding' not in col.lower()]
+        
+        if embedding_cols:
+            print(f"   - Embedding features: {len(embedding_cols)}")
+        if molecular_cols:
+            print(f"   - Molecular features: {len(molecular_cols)}")
+        
+        # Extract features for valid samples only
+        X = df.loc[valid_indices, existing_feature_cols].reset_index(drop=True)
+        
+        # Ensure numeric types and handle inf/extreme values
+        for col in X.columns:
+            X[col] = pd.to_numeric(X[col], errors='coerce')
+        
+        # Replace inf and -inf with NaN, then fill
+        X = X.replace([np.inf, -np.inf], np.nan)
+        X = X.fillna(0)
+        
+        # Clip extreme values to prevent overflow
+        # Clip to reasonable range (e.g., -1e10 to 1e10)
+        X = X.clip(lower=-1e10, upper=1e10)
+        
+        print(f"   Using {X.shape[1]} pre-computed features from CSV")
+    else:
+        # No pre-computed features, calculate from SMILES
+        print("   No pre-computed features found, calculating from SMILES...")
+        try:
+            X = calculate_all_features(
+                smiles_list,
+                reduced_features_path=args.reduced_features,
+                include_map4=args.include_map4,
+                map4_dimensions=args.map4_dimensions
+            )
+            print(f"   Features calculated: {X.shape[1]}")
+        except Exception as e:
+            print(f"Error calculating features: {e}")
+            import traceback
+            traceback.print_exc()
+            return
     
     # Step 2.5: Feature selection
     if args.use_feature_selection:
@@ -192,6 +264,39 @@ def main():
             import traceback
             traceback.print_exc()
             return
+    
+    # Step 2.6: Cache featurized data (if enabled)
+    if args.cache_features:
+        print("\n2.6. Caching featurized data...")
+        try:
+            cache_dir = os.path.join(args.output_dir, 'feature_cache')
+            os.makedirs(cache_dir, exist_ok=True)
+            
+            # Save feature matrix and labels
+            X.to_csv(os.path.join(cache_dir, 'X_features.csv'), index=False)
+            y.to_csv(os.path.join(cache_dir, 'y_labels.csv'), index=False)
+            
+            # Save feature names
+            feature_names_path = os.path.join(cache_dir, 'feature_names.json')
+            with open(feature_names_path, 'w') as f:
+                json.dump({'feature_names': X.columns.tolist()}, f, indent=2)
+            
+            # Save metadata
+            cache_metadata = {
+                'n_samples': len(X),
+                'n_features': X.shape[1],
+                'feature_names': X.columns.tolist(),
+                'task': task
+            }
+            with open(os.path.join(cache_dir, 'cache_metadata.json'), 'w') as f:
+                json.dump(cache_metadata, f, indent=2)
+            
+            print(f"   Featurized data cached to {cache_dir}/")
+            print(f"   - X_features.csv: {X.shape[0]} samples × {X.shape[1]} features")
+            print(f"   - y_labels.csv: {len(y)} labels")
+            print(f"   - feature_names.json: Feature names")
+        except Exception as e:
+            print(f"   Warning: Could not cache features: {e}")
     
     # Step 3: Split data
     print("\n3. Splitting data...")
@@ -284,6 +389,37 @@ def main():
         
         print(f"   Model trained with {history['n_estimators']} estimators")
         
+        # Step 5.5: Train quantile models for confidence intervals (if enabled)
+        quantile_models = None
+        if args.confidence_intervals and task == 'regression' and CONFIDENCE_AVAILABLE:
+            print("\n5.5. Training quantile models for confidence intervals...")
+            try:
+                alpha = 1 - args.confidence_level
+                quantiles = [alpha / 2, 1 - alpha / 2]  # e.g., [0.05, 0.95] for 90% CI
+                
+                quantile_models = train_quantile_models(
+                    X_train_final, y_train_final,
+                    X_val_final, y_val_final,
+                    final_params,
+                    quantiles=quantiles,
+                    task=task
+                )
+                
+                # Save quantile models
+                quantile_models_path = os.path.join(args.output_dir, 'quantile_models.pkl')
+                with open(quantile_models_path, 'wb') as f:
+                    pickle.dump(quantile_models, f)
+                print(f"   Quantile models saved to {quantile_models_path}")
+                
+            except Exception as e:
+                print(f"   Warning: Could not train quantile models: {e}")
+                print(f"   Continuing without confidence intervals...")
+                quantile_models = None
+        elif args.confidence_intervals and task != 'regression':
+            print("\n5.5. Skipping confidence intervals (only supported for regression)")
+        elif args.confidence_intervals and not CONFIDENCE_AVAILABLE:
+            print("\n5.5. Skipping confidence intervals (module not available)")
+        
     except Exception as e:
         print(f"Error training model: {e}")
         import traceback
@@ -291,9 +427,44 @@ def main():
         return
     
     # Step 6: Evaluate on test set (if available)
+    test_predictions_with_ci = None
     if X_test is not None and y_test is not None:
         print("\n6. Evaluating on test set...")
         test_metrics = evaluate_model(model, X_test, y_test, task=task)
+        
+        # Calculate confidence intervals for test predictions (if enabled)
+        if args.confidence_intervals and task == 'regression' and quantile_models is not None:
+            print("   Calculating confidence intervals for test predictions...")
+            try:
+                ci_results = predict_with_confidence(
+                    model, quantile_models, X_test,
+                    confidence_level=args.confidence_level
+                )
+                
+                # Create predictions DataFrame with confidence intervals
+                test_predictions_with_ci = pd.DataFrame({
+                    'y_true': y_test.values,
+                    'y_pred': ci_results['predictions'],
+                    'lower_bound': ci_results['lower_bound'],
+                    'upper_bound': ci_results['upper_bound'],
+                    'confidence_interval': ci_results['confidence_interval'],
+                    'confidence_level': args.confidence_level
+                })
+                
+                # Save test predictions with confidence intervals
+                test_pred_path = os.path.join(args.output_dir, 'test_predictions_with_ci.csv')
+                test_predictions_with_ci.to_csv(test_pred_path, index=False)
+                print(f"   Test predictions with confidence intervals saved to {test_pred_path}")
+                
+                # Add CI statistics to test_metrics
+                test_metrics['confidence_intervals'] = {
+                    'mean_interval_width': float(np.mean(ci_results['confidence_interval'])),
+                    'median_interval_width': float(np.median(ci_results['confidence_interval'])),
+                    'confidence_level': args.confidence_level
+                }
+                
+            except Exception as e:
+                print(f"   Warning: Could not calculate confidence intervals: {e}")
         
         if task == 'regression':
             print(f"   Test R²: {test_metrics['r2']:.4f}")
@@ -301,6 +472,9 @@ def main():
             print(f"   Test RMSE: {test_metrics['rmse']:.4f}")
             print(f"   Test Pearson r: {test_metrics['pearson_r']:.4f} (p={test_metrics['pearson_p_value']:.2e})")
             print(f"   Test Spearman ρ: {test_metrics['spearman_rho']:.4f} (p={test_metrics['spearman_p_value']:.2e})")
+            if 'confidence_intervals' in test_metrics:
+                ci_info = test_metrics['confidence_intervals']
+                print(f"   Mean CI width: {ci_info['mean_interval_width']:.4f}")
         else:  # classification
             print(f"   Test Accuracy: {test_metrics['accuracy']:.4f}")
             print(f"   Test Precision: {test_metrics['precision']:.4f}")

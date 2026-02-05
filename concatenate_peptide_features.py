@@ -37,7 +37,17 @@ def load_peptide_data(filepath):
     embedding_cols = [col for col in df.columns if col.startswith('embedding_')]
     print(f"  Found {len(embedding_cols)} embedding features")
     
-    return df, embedding_cols
+    # Identify columns to exclude (label-related columns that shouldn't be features)
+    exclude_cols = ['label', 'smiles']
+    # Also exclude common label-like column names
+    label_like_patterns = ['permeability', 'pampa', 'caco2', 'mdck', 'rrck']
+    for col in df.columns:
+        col_lower = col.lower()
+        if any(pattern in col_lower for pattern in label_like_patterns) and col != 'label':
+            exclude_cols.append(col)
+            print(f"  Warning: Excluding potential label column: {col}")
+    
+    return df, embedding_cols, exclude_cols
 
 
 def calculate_molecular_features(smiles_list, reduced_features_path=None, 
@@ -132,7 +142,7 @@ def main():
     print("=" * 80)
     
     # Step 1: Load peptide data
-    df_peptide, embedding_cols = load_peptide_data(args.peptide_data)
+    df_peptide, embedding_cols, exclude_cols = load_peptide_data(args.peptide_data)
     
     # Step 2: Calculate molecular features
     # Filter out rows with missing SMILES
@@ -158,16 +168,27 @@ def main():
         print(f"\nSaving features only to {args.output}...")
     else:
         # Save with labels and metadata
-        # Get metadata columns (everything except embeddings)
-        metadata_cols = [col for col in df_valid.columns 
-                        if col not in embedding_cols]
+        # Get metadata columns (everything except embeddings and excluded columns)
+        # Keep only essential metadata: smiles, label, and optionally fold
+        essential_metadata = ['smiles', 'label']
+        if 'fold' in df_valid.columns:
+            essential_metadata.append('fold')
         
-        # Combine metadata with features
+        # Get other metadata columns (excluding label-like columns)
+        other_metadata = [col for col in df_valid.columns 
+                         if col not in embedding_cols 
+                         and col not in exclude_cols
+                         and col not in essential_metadata]
+        
+        # Combine: essential metadata + other safe metadata + features
+        metadata_to_include = essential_metadata + other_metadata
         output_df = pd.concat([
-            df_valid[metadata_cols].reset_index(drop=True),
+            df_valid[metadata_to_include].reset_index(drop=True),
             X_combined
         ], axis=1)
         print(f"\nSaving combined dataset to {args.output}...")
+        print(f"  Included metadata: {len(metadata_to_include)} columns")
+        print(f"  Excluded label-like columns: {exclude_cols}")
     
     # Save to CSV
     output_df.to_csv(args.output, index=False)
