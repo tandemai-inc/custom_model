@@ -73,7 +73,7 @@ nohup conda run -n xgboost_training python train_model.py \
     --output_dir "$OUTPUT_DIR" \
     --random_state 42 \
     --test_size 0.2 \
-    > "permeability_training.log" 2>&1 &
+    > "$OUTPUT_DIR/training.log" 2>&1 &
 
 TRAIN_PID=$!
 echo "✓ Training started (PID: $TRAIN_PID)"
@@ -83,7 +83,7 @@ echo "  ./check_training_progress.sh $OUTPUT_DIR"
 echo "  conda run -n xgboost_training python monitor_permeability.py"
 echo ""
 echo "View log:"
-echo "  tail -f permeability_training.log"
+echo "  tail -f $OUTPUT_DIR/training.log"
 echo ""
 echo "================================================================================"
 
