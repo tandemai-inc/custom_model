@@ -115,7 +115,9 @@ def main():
     parser.add_argument('--map4_dimensions', type=int, default=1024,
                        help='MAP4 fingerprint dimensions (default: 1024)')
     parser.add_argument('--test_size', type=float, default=0.2,
-                       help='Test set size (default: 0.2)')
+                       help='Test set size (default: 0.2); ignored if --test_path is set')
+    parser.add_argument('--test_path', type=str, default=None,
+                       help='Path to separate test CSV (must have smiles and label). When set, train uses all --data and test uses this file.')
     parser.add_argument('--random_state', type=int, default=42,
                        help='Random state for reproducibility (default: 42)')
     parser.add_argument('--skip_optuna', action='store_true',
@@ -145,6 +147,8 @@ def main():
         print("XGBoost Training Pipeline")
         print("=" * 80)
         print(f"Data: {args.data}")
+        if args.test_path:
+            print(f"Test data (external): {args.test_path}")
         print(f"Task: {args.task}")
         print(f"Optuna trials: {args.n_trials}")
         print(f"CV folds: {args.cv_folds}")
@@ -211,6 +215,10 @@ def main():
         metadata_cols = ['smiles', 'label']
         if 'fold' in df.columns:
             metadata_cols.append('fold')
+        # Exclude common drug/dataset ID and target-like columns so we use SMILES-based features when appropriate
+        for col in ['Drug_ID', 'ID', 'pIC50', 'Drug', 'scaffold']:
+            if col in df.columns and col not in metadata_cols:
+                metadata_cols.append(col)
     
         # Also exclude common label-like column names to prevent data leakage
         label_like_patterns = ['permeability', 'pampa', 'caco2', 'mdck', 'rrck']
@@ -344,11 +352,57 @@ def main():
             except Exception as e:
                 print(f"   Warning: Could not cache features: {e}")
     
+        # Step 2.7: Load external test set (optional)
+        external_test_used = False
+        if args.test_path:
+            print("\n2.7. Loading external test set...")
+            try:
+                df_test = pd.read_csv(args.test_path)
+                if 'smiles' not in df_test.columns or 'label' not in df_test.columns:
+                    print("Error: Test file must contain 'smiles' and 'label' columns")
+                    return
+                test_valid = df_test.dropna(subset=['smiles', 'label'])
+                test_smiles_list = test_valid['smiles'].tolist()
+                y_test = test_valid['label'].copy()
+                if task == 'classification':
+                    y_test = (y_test >= classification_threshold).astype(int)
+                print(f"   Test samples: {len(test_smiles_list)}")
+                if len(existing_feature_cols) == 0:
+                    X_test_raw = calculate_all_features(
+                        test_smiles_list,
+                        reduced_features_path=args.reduced_features,
+                        include_map4=args.include_map4,
+                        map4_dimensions=args.map4_dimensions
+                    )
+                    train_cols = X.columns.tolist()
+                    missing = [c for c in train_cols if c not in X_test_raw.columns]
+                    if missing:
+                        for c in missing:
+                            X_test_raw[c] = 0
+                    X_test = X_test_raw[train_cols]
+                    X_train, y_train = X, y
+                    external_test_used = True
+                    print(f"   Test features aligned: {X_test.shape[1]} (same as train)")
+                else:
+                    print("Error: External test set requires train data to use SMILES-based features (no pre-computed columns). Exclude extra columns from train CSV or use train CSV with only smiles and label.")
+                    return
+            except FileNotFoundError:
+                print(f"Error: Test file not found: {args.test_path}")
+                return
+            except Exception as e:
+                print(f"Error loading/featurizing test set: {e}")
+                import traceback
+                traceback.print_exc()
+                return
+    
         # Step 3: Split data
         print("\n3. Splitting data...")
         from sklearn.model_selection import train_test_split
     
-        if args.test_size == 0:
+        if external_test_used:
+            print(f"   Train set: {len(X_train)} samples (from --data)")
+            print(f"   Test set: {len(X_test)} samples (from --test_path)")
+        elif args.test_size == 0:
             # Use all data for training (no test set)
             X_train, X_test, y_train, y_test = X, None, y, None
             print(f"   Train set: {len(X_train)} samples (all data)")
@@ -652,6 +706,7 @@ def main():
         results = {
             'timestamp': datetime.now().isoformat(),
             'data_file': args.data,
+            'test_file': args.test_path,
             'task': task,
             'classification_threshold': classification_threshold if task == 'classification' else None,
             'n_samples': len(smiles_list),
