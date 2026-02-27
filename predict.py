@@ -227,6 +227,8 @@ def main():
                        help='MAP4 fingerprint dimensions (default: 1024)')
     parser.add_argument('--save_features', action='store_true',
                        help='Save the featurized data to CSV')
+    parser.add_argument('--calculate_confidence', action='store_true',
+                       help='Calculate distance-based confidence scores (requires confidence artifacts from training)')
     
     args = parser.parse_args()
     
@@ -280,6 +282,34 @@ def main():
     # Step 5: Make predictions
     predictions = make_predictions(model, X_final)
     
+    # Step 5.5: Calculate confidence scores (if enabled and artifacts exist)
+    confidence_scores = None
+    confidence_levels = None
+    if args.calculate_confidence:
+        print("\nCalculating confidence scores...")
+        from confidence_distance import load_confidence_artifacts, predict_confidence
+        
+        try:
+            scaler, X_train_scaled, thresholds, k = load_confidence_artifacts(args.model_dir)
+            # Use features from X_final (which already has RDKit columns)
+            distances, confidence = predict_confidence(
+                X_final, scaler, X_train_scaled, thresholds, k=k
+            )
+            confidence_scores = distances
+            confidence_levels = confidence
+            
+            conf_counts = pd.Series(confidence).value_counts()
+            print(f"  Confidence distribution:")
+            for level in ['high', 'medium', 'low']:
+                if level in conf_counts:
+                    print(f"    {level}: {conf_counts[level]} ({conf_counts[level]/len(confidence)*100:.1f}%)")
+        except FileNotFoundError as e:
+            print(f"  Warning: Confidence artifacts not found. Skipping confidence calculation.")
+            print(f"  {e}")
+        except Exception as e:
+            print(f"  Warning: Error calculating confidence: {e}")
+            print(f"  Skipping confidence calculation.")
+    
     # Step 6: Save results with metadata
     print(f"\nSaving predictions to {args.output}...")
     
@@ -287,9 +317,16 @@ def main():
     output_df = df_data.loc[valid_indices].copy()
     output_df['prediction'] = predictions
     
-    # Reorder columns to put prediction near the end
-    cols = [c for c in output_df.columns if c != 'prediction']
-    output_df = output_df[cols + ['prediction']]
+    # Add confidence scores if calculated
+    if confidence_levels is not None:
+        output_df['confidence_level'] = confidence_levels
+        output_df['confidence_distance'] = confidence_scores
+    
+    # Reorder columns to put prediction and confidence near the end
+    priority_cols = ['prediction', 'confidence_level', 'confidence_distance']
+    other_cols = [c for c in output_df.columns if c not in priority_cols]
+    final_cols = other_cols + [c for c in priority_cols if c in output_df.columns]
+    output_df = output_df[final_cols]
     
     output_df.to_csv(args.output, index=False)
     print(f"  Saved {len(output_df)} predictions with metadata")

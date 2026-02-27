@@ -126,6 +126,14 @@ def main():
                        help='Confidence level for intervals (default: 0.90 for 90%% CI)')
     parser.add_argument('--cache_features', action='store_true', default=True,
                        help='Cache featurized data in results folder (default: True)')
+    parser.add_argument('--calculate_confidence', action='store_true',
+                       help='Calculate distance-based confidence scores for test set')
+    parser.add_argument('--confidence_k_neighbors', type=int, default=5,
+                       help='Number of nearest neighbors for confidence calculation (default: 5)')
+    parser.add_argument('--confidence_low_percentile', type=float, default=33.0,
+                       help='Percentile threshold for low confidence (default: 33)')
+    parser.add_argument('--confidence_high_percentile', type=float, default=67.0,
+                       help='Percentile threshold for high confidence (default: 67)')
     
     args = parser.parse_args()
     
@@ -527,6 +535,61 @@ def main():
             print("\n6. Skipping test set evaluation (test_size=0, using all data for training)")
             test_metrics = None
     
+        # Step 6.5: Calculate distance-based confidence (if enabled and test set exists)
+        if args.calculate_confidence and X_test is not None and y_test is not None:
+            print("\n6.5. Calculating distance-based confidence scores...")
+            from confidence_distance import fit_confidence_calculator, predict_confidence, save_confidence_artifacts
+            
+            try:
+                # Fit on training features (uses RDKit columns from X_train)
+                scaler, X_train_rdkit_scaled, thresholds = fit_confidence_calculator(
+                    X_train,
+                    k=args.confidence_k_neighbors,
+                    low_percentile=args.confidence_low_percentile,
+                    high_percentile=args.confidence_high_percentile
+                )
+                
+                # Predict confidence for test set (uses RDKit columns from X_test)
+                test_distances, test_confidence = predict_confidence(
+                    X_test, scaler, X_train_rdkit_scaled, thresholds, k=args.confidence_k_neighbors
+                )
+                
+                # Save artifacts
+                save_confidence_artifacts(
+                    scaler, X_train_rdkit_scaled, thresholds, args.confidence_k_neighbors, 
+                    args.output_dir
+                )
+                
+                # Save test predictions with confidence
+                test_pred_with_conf = pd.DataFrame({
+                    'y_true': y_test.values if hasattr(y_test, 'values') else y_test,
+                    'y_pred': model.predict(X_test),
+                    'confidence_level': test_confidence,
+                    'confidence_distance': test_distances
+                })
+                conf_path = os.path.join(args.output_dir, 'test_predictions_with_confidence.csv')
+                test_pred_with_conf.to_csv(conf_path, index=False)
+                print(f"   Saved to {conf_path}")
+                
+                # Print confidence distribution
+                conf_counts = pd.Series(test_confidence).value_counts()
+                print(f"   Test set confidence distribution:")
+                for level in ['high', 'medium', 'low']:
+                    if level in conf_counts:
+                        print(f"     {level}: {conf_counts[level]} ({conf_counts[level]/len(test_confidence)*100:.1f}%)")
+                
+                # Add confidence info to test_metrics
+                if test_metrics:
+                    test_metrics['confidence_distribution'] = conf_counts.to_dict()
+                    test_metrics['confidence_mean_distance'] = float(np.mean(test_distances))
+                    test_metrics['confidence_thresholds'] = {'low': float(thresholds[0]), 'high': float(thresholds[1])}
+                    
+            except Exception as e:
+                print(f"   Warning: Error calculating confidence: {e}")
+                import traceback
+                traceback.print_exc()
+                print(f"   Continuing without confidence calculation...")
+    
         # Step 7: Cross-validation evaluation
         print("\n7. Cross-validation evaluation...")
         cv_results = cross_validate_model(
@@ -601,6 +664,12 @@ def main():
             'best_hyperparameters': best_params,
             'best_optuna_value': best_value if not args.skip_optuna else None,
             'optuna_skipped': args.skip_optuna,
+            'confidence_calculation': {
+                'enabled': args.calculate_confidence,
+                'k_neighbors': args.confidence_k_neighbors if args.calculate_confidence else None,
+                'low_percentile': args.confidence_low_percentile if args.calculate_confidence else None,
+                'high_percentile': args.confidence_high_percentile if args.calculate_confidence else None
+            },
             'test_metrics': test_metrics,  # None if test_size=0
             'cv_metrics': cv_results if task == 'classification' else {
                 'r2_mean': cv_results['r2_mean'],
