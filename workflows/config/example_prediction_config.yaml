@@ -1,0 +1,19 @@
+# Example config for XGBoost prediction workflow
+# Usage: python workflows/xgboost_workflow_master.py -i /path/to/this/file.yaml
+
+common:
+  debug: false
+  job_type: slurm
+
+default:
+  cpus-per-task: 4
+  mem: 8G
+  time: "02:00:00"
+
+parameter:
+  xgboost_prediction:
+    input_data: /path/to/predict.csv
+    model_dir: /path/to/trained_model
+    output_file: /path/to/predictions.csv
+    calculate_confidence: true
+    smiles_col: smiles  # optional, default smiles

@@ -1,0 +1,33 @@
+# Default XGBoost workflow configuration
+# Override these in the main config file passed via -i
+
+common:
+  debug: false
+  job_type: slurm  # or "local"
+
+# Slurm resource defaults (when job_type: slurm)
+default:
+  cpus-per-task: 8
+  mem: 16G
+  time: "24:00:00"
+
+# Training parameters (parameter.xgboost_training in main config)
+# Example:
+# parameter:
+#   xgboost_training:
+#     input_data: /path/to/train.csv
+#     output_dir: /path/to/output
+#     task: classification
+#     test_path: /path/to/test.csv  # optional
+#     n_trials: 50
+#     skip_optuna: false
+#     calculate_confidence: true
+
+# Prediction parameters (parameter.xgboost_prediction in main config)
+# Example:
+# parameter:
+#   xgboost_prediction:
+#     input_data: /path/to/predict.csv
+#     model_dir: /path/to/trained_model
+#     output_file: /path/to/predictions.csv
+#     calculate_confidence: true

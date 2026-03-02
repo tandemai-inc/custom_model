@@ -107,6 +107,20 @@ python train_model.py \
     --output_dir peptide_results/
 ```
 
+## Workflow Orchestration (ta_workflow)
+
+For job scheduling and monitoring via ta_workflow (similar to ta_admet):
+
+```bash
+# Training
+python workflows/xgboost_workflow_master.py -i /path/to/config.yaml
+
+# Config must define parameter.xgboost_training or parameter.xgboost_prediction
+# See workflows/config/example_training_config.yaml and example_prediction_config.yaml
+```
+
+**Dependencies**: `ta_workflow`, `ta_base`, `pyyaml`. Install from your internal package index.
+
 ## Command Line Arguments
 
 ### `train_model.py`
