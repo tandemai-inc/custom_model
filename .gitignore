@@ -57,6 +57,10 @@ optuna.db
 *.log
 *.csv
 
+# Shell scripts and archives
+*.sh
+*.zip
+
 # Development/utility scripts (tracked in sandbox branch only)
 concatenate_peptide_features.py
 monitor_training.py
