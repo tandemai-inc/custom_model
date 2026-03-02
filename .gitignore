@@ -53,5 +53,10 @@ optuna.db
 .ipynb_checkpoints/
 *.ipynb
 
-#files 
+# Development/utility scripts (tracked in sandbox branch only)
 concatenate_peptide_features.py
+monitor_training.py
+monitor_permeability.py
+plot_cv_predictions.py
+reduce_mordred_features.py
+regenerate_cv_predictions.py
