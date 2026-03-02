@@ -15,6 +15,9 @@ from datetime import datetime
 import warnings
 warnings.filterwarnings('ignore')
 
+# Add parent directory to path for imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 
 class Tee:
     """Write to multiple file-like objects (e.g. stdout and a log file)."""
@@ -53,17 +56,17 @@ class TeeStdout:
 
 
 # Import local modules
-from featurization import calculate_all_features
-from optuna_tuning import optimize_hyperparameters
-from xgboost_trainer import (
+from features.featurization import calculate_all_features
+from model.optuna_tuning import optimize_hyperparameters
+from model.xgboost_trainer import (
     train_xgboost, evaluate_model, cross_validate_model,
     save_model, get_feature_importance
 )
-from feature_selection import (
+from features.feature_selection import (
     select_features_mutual_info, save_selected_features, load_selected_features
 )
 try:
-    from confidence_intervals import (
+    from features.confidence_intervals import (
         train_quantile_models, predict_with_confidence, calculate_prediction_intervals_cv
     )
     CONFIDENCE_AVAILABLE = True
@@ -71,7 +74,7 @@ except ImportError:
     CONFIDENCE_AVAILABLE = False
     print("Warning: confidence_intervals module not available")
 try:
-    from confidence_intervals import (
+    from features.confidence_intervals import (
         train_quantile_models, predict_with_confidence, calculate_prediction_intervals_cv
     )
     CONFIDENCE_AVAILABLE = True
@@ -108,7 +111,7 @@ def main():
     parser.add_argument('--output_dir', type=str, default='results',
                        help='Output directory for results (default: results)')
     parser.add_argument('--reduced_features', type=str, 
-                       default='reduced_mordred_features.json',
+                       default='features/reduced_mordred_features.json',
                        help='Path to reduced Mordred features JSON file')
     parser.add_argument('--include_map4', action='store_true', default=True,
                        help='Include MAP4 fingerprints (default: True)')
@@ -592,7 +595,7 @@ def main():
         # Step 6.5: Calculate distance-based confidence (if enabled and test set exists)
         if args.calculate_confidence and X_test is not None and y_test is not None:
             print("\n6.5. Calculating distance-based confidence scores...")
-            from confidence_distance import fit_confidence_calculator, predict_confidence, save_confidence_artifacts
+            from features.confidence_distance import fit_confidence_calculator, predict_confidence, save_confidence_artifacts
             
             try:
                 # Fit on training features (uses RDKit columns from X_train)

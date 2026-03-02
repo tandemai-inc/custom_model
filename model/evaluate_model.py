@@ -20,9 +20,14 @@ from sklearn.metrics import (
 import json
 import argparse
 import os
-from xgboost_trainer import load_model, evaluate_model
+import sys
 import warnings
 warnings.filterwarnings('ignore')
+
+# Add parent directory to path for imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from model.xgboost_trainer import load_model, evaluate_model
 
 
 def calculate_all_metrics(y_true, y_pred):

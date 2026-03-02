@@ -10,15 +10,19 @@ import numpy as np
 import argparse
 import json
 import os
+import sys
 import pickle
 from pathlib import Path
 import warnings
 warnings.filterwarnings('ignore')
 
+# Add parent directory to path for imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 # Import local modules
-from featurization import calculate_all_features
-from xgboost_trainer import load_model
-from feature_selection import load_selected_features
+from features.featurization import calculate_all_features
+from model.xgboost_trainer import load_model
+from features.feature_selection import load_selected_features
 
 
 def load_prediction_data(filepath, smiles_col='smiles'):
@@ -219,7 +223,7 @@ def main():
     parser.add_argument('--smiles_col', type=str, default='smiles',
                        help='Name of SMILES column (default: smiles)')
     parser.add_argument('--reduced_features', type=str, 
-                       default='reduced_mordred_features.json',
+                       default='features/reduced_mordred_features.json',
                        help='Path to reduced Mordred features JSON file')
     parser.add_argument('--include_map4', action='store_true', default=True,
                        help='Include MAP4 fingerprints (default: True)')
@@ -287,7 +291,7 @@ def main():
     confidence_levels = None
     if args.calculate_confidence:
         print("\nCalculating confidence scores...")
-        from confidence_distance import load_confidence_artifacts, predict_confidence
+        from features.confidence_distance import load_confidence_artifacts, predict_confidence
         
         try:
             scaler, X_train_scaled, thresholds, k = load_confidence_artifacts(args.model_dir)
