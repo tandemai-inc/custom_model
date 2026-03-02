@@ -1,2121 +1,0 @@
-================================================================================
-XGBoost Training Pipeline
-================================================================================
-Data: peptide_molecular_combined.csv
-Task: regression
-Optuna trials: 50
-CV folds: 5
-Metric: r2
-Feature selection: True
-  Selection ratio: 1.0
-Output directory: peptide_full_results
-================================================================================
-
-1. Loading data...
-   Loaded 3103 samples
-   Valid samples: 3103
-   Target range: [5.52, 11.14]
-   Target mean: 9.45 ± 0.65
-
-2. Calculating features...
-Calculating features...
-  Processing 3103 molecules
-  Calculating Mordred features...
-  Calculating Morgan fingerprints...
-  Calculating RDKit fingerprints...
-  Calculating MACCS keys...
-  Calculating MAP4 fingerprints...
-  Combining features...
-  Converting features to numeric types...
-  Total features: 5938
-  Feature breakdown:
-    Mordred: 651
-    Morgan: 2048
-    RDKit: 2048
-    MACCS: 167
-    MAP4: 1024
-   Features calculated: 5938
-
-2.5. Feature selection...
-   Calculating mutual information for 5938 features...
-   Selected 3103 features from 5938 (ratio: 52.26%)
-   MI score range: [0.0013, 0.1355]
-   Selected features saved to peptide_full_results/selected_features.json
-   MI scores saved to peptide_full_results/feature_selection_scores.csv
-
-3. Splitting data...
-   Train set: 2482 samples
-   Test set: 621 samples
-
-4. Optuna hyperparameter optimization...
-================================================================================
-Optuna Hyperparameter Optimization
-================================================================================
-  Task: regression
-  Metric: r2
-  CV folds: 5
-  Trials: 50
-  Direction: maximize
-
-Starting optimization...
-[I 2026-02-02 15:32:24,840] Trial 0 finished with value: 0.6705574731154769 and parameters: {'n_estimators': 812, 'max_depth': 10, 'learning_rate': 0.1205712628744377, 'subsample': 0.8394633936788146, 'colsample_bytree': 0.6624074561769746, 'min_child_weight': 2, 'gamma': 0.02904180608409973, 'reg_alpha': 0.8661761457749352, 'reg_lambda': 0.6011150117432088}. Best is trial 0 with value: 0.6705574731154769.
-[I 2026-02-02 15:33:38,754] Trial 1 finished with value: 0.7182529990002526 and parameters: {'n_estimators': 1446, 'max_depth': 3, 'learning_rate': 0.2708160864249968, 'subsample': 0.9329770563201687, 'colsample_bytree': 0.6849356442713105, 'min_child_weight': 2, 'gamma': 0.09170225492671691, 'reg_alpha': 0.3042422429595377, 'reg_lambda': 0.5247564316322378}. Best is trial 1 with value: 0.7182529990002526.
-[I 2026-02-02 15:34:30,141] Trial 2 finished with value: 0.7132588626696883 and parameters: {'n_estimators': 921, 'max_depth': 5, 'learning_rate': 0.08012737503998542, 'subsample': 0.6557975442608167, 'colsample_bytree': 0.7168578594140873, 'min_child_weight': 3, 'gamma': 0.22803499210851796, 'reg_alpha': 0.7851759613930136, 'reg_lambda': 0.19967378215835974}. Best is trial 1 with value: 0.7182529990002526.
-[I 2026-02-02 15:35:39,433] Trial 3 finished with value: 0.6829297086995219 and parameters: {'n_estimators': 1077, 'max_depth': 7, 'learning_rate': 0.011711509955524094, 'subsample': 0.8430179407605753, 'colsample_bytree': 0.6682096494749166, 'min_child_weight': 1, 'gamma': 0.4744427686266666, 'reg_alpha': 0.9656320330745594, 'reg_lambda': 0.8083973481164611}. Best is trial 1 with value: 0.7182529990002526.
-[I 2026-02-02 15:36:21,979] Trial 4 finished with value: 0.7358397683477299 and parameters: {'n_estimators': 679, 'max_depth': 3, 'learning_rate': 0.1024932221692416, 'subsample': 0.7760609974958406, 'colsample_bytree': 0.6488152939379115, 'min_child_weight': 4, 'gamma': 0.017194260557609198, 'reg_alpha': 0.9093204020787821, 'reg_lambda': 0.2587799816000169}. Best is trial 4 with value: 0.7358397683477299.
-[I 2026-02-02 15:37:33,321] Trial 5 finished with value: 0.7025505812100008 and parameters: {'n_estimators': 1359, 'max_depth': 5, 'learning_rate': 0.05864129169696527, 'subsample': 0.8186841117373118, 'colsample_bytree': 0.6739417822102108, 'min_child_weight': 7, 'gamma': 0.3875664116805573, 'reg_alpha': 0.9394989415641891, 'reg_lambda': 0.8948273504276488}. Best is trial 4 with value: 0.7358397683477299.
-[I 2026-02-02 15:38:55,993] Trial 6 finished with value: 0.7025052041412707 and parameters: {'n_estimators': 1236, 'max_depth': 10, 'learning_rate': 0.01351182947645082, 'subsample': 0.6783931449676581, 'colsample_bytree': 0.6180909155642152, 'min_child_weight': 3, 'gamma': 0.194338644844741, 'reg_alpha': 0.2713490317738959, 'reg_lambda': 0.8287375091519293}. Best is trial 4 with value: 0.7358397683477299.
-[I 2026-02-02 15:39:40,943] Trial 7 finished with value: 0.7003733109362857 and parameters: {'n_estimators': 778, 'max_depth': 5, 'learning_rate': 0.06333268775321842, 'subsample': 0.6563696899899051, 'colsample_bytree': 0.9208787923016158, 'min_child_weight': 1, 'gamma': 0.49344346830025865, 'reg_alpha': 0.7722447692966574, 'reg_lambda': 0.1987156815341724}. Best is trial 4 with value: 0.7358397683477299.
-[I 2026-02-02 15:39:52,016] Trial 8 finished with value: 0.6727380808973187 and parameters: {'n_estimators': 110, 'max_depth': 9, 'learning_rate': 0.11069143219393454, 'subsample': 0.8916028672163949, 'colsample_bytree': 0.9085081386743783, 'min_child_weight': 1, 'gamma': 0.1792328642721363, 'reg_alpha': 0.11586905952512971, 'reg_lambda': 0.8631034258755935}. Best is trial 4 with value: 0.7358397683477299.
-[I 2026-02-02 15:41:12,248] Trial 9 finished with value: 0.7112565596307525 and parameters: {'n_estimators': 1284, 'max_depth': 5, 'learning_rate': 0.012413189635294229, 'subsample': 0.7243929286862649, 'colsample_bytree': 0.7300733288106989, 'min_child_weight': 6, 'gamma': 0.31877873567760656, 'reg_alpha': 0.8872127425763265, 'reg_lambda': 0.4722149251619493}. Best is trial 4 with value: 0.7358397683477299.
-[I 2026-02-02 15:43:07,220] Trial 10 finished with value: 0.7418887030973791 and parameters: {'n_estimators': 1896, 'max_depth': 3, 'learning_rate': 0.028477486830279893, 'subsample': 0.751180619986081, 'colsample_bytree': 0.8144754354791038, 'min_child_weight': 5, 'gamma': 0.007563407956692315, 'reg_alpha': 0.6135622195040731, 'reg_lambda': 0.04739243550252642}. Best is trial 10 with value: 0.7418887030973791.
-[I 2026-02-02 15:45:06,606] Trial 11 finished with value: 0.7433739687024168 and parameters: {'n_estimators': 1993, 'max_depth': 3, 'learning_rate': 0.0262209763647716, 'subsample': 0.7482501209054793, 'colsample_bytree': 0.814249705614196, 'min_child_weight': 5, 'gamma': 0.005510890509713698, 'reg_alpha': 0.588982843640911, 'reg_lambda': 0.004796303681366548}. Best is trial 11 with value: 0.7433739687024168.
-[I 2026-02-02 15:47:01,810] Trial 12 finished with value: 0.7426920658556948 and parameters: {'n_estimators': 1938, 'max_depth': 3, 'learning_rate': 0.026588373306819242, 'subsample': 0.7382774980993067, 'colsample_bytree': 0.8155245426273388, 'min_child_weight': 5, 'gamma': 0.10590611533139119, 'reg_alpha': 0.5355888625539531, 'reg_lambda': 0.0031084175084087574}. Best is trial 11 with value: 0.7433739687024168.
-[I 2026-02-02 15:48:58,278] Trial 13 finished with value: 0.7144178274607227 and parameters: {'n_estimators': 1993, 'max_depth': 7, 'learning_rate': 0.027730138923026955, 'subsample': 0.6033472971912299, 'colsample_bytree': 0.82274857056452, 'min_child_weight': 5, 'gamma': 0.12077746649016988, 'reg_alpha': 0.5448339391532324, 'reg_lambda': 0.0182921010480008}. Best is trial 11 with value: 0.7433739687024168.
-[I 2026-02-02 15:50:34,323] Trial 14 finished with value: 0.7280462512536479 and parameters: {'n_estimators': 1659, 'max_depth': 4, 'learning_rate': 0.03269230106309387, 'subsample': 0.9984067957444854, 'colsample_bytree': 0.9978801385963901, 'min_child_weight': 5, 'gamma': 0.09112300487481183, 'reg_alpha': 0.39998069938371494, 'reg_lambda': 0.3415559942626912}. Best is trial 11 with value: 0.7433739687024168.
-[I 2026-02-02 15:52:16,950] Trial 15 finished with value: 0.7332549079764489 and parameters: {'n_estimators': 1711, 'max_depth': 4, 'learning_rate': 0.019900546689375825, 'subsample': 0.7147479100915881, 'colsample_bytree': 0.7674056310254873, 'min_child_weight': 7, 'gamma': 0.14290565535379038, 'reg_alpha': 0.6494369368713313, 'reg_lambda': 0.10443349489365258}. Best is trial 11 with value: 0.7433739687024168.
-[I 2026-02-02 15:53:50,330] Trial 16 finished with value: 0.6920136858768775 and parameters: {'n_estimators': 1672, 'max_depth': 8, 'learning_rate': 0.04002349498387791, 'subsample': 0.7790817164521516, 'colsample_bytree': 0.8667317513386179, 'min_child_weight': 6, 'gamma': 0.2802720669148996, 'reg_alpha': 0.45820191254070314, 'reg_lambda': 0.3583902847905419}. Best is trial 11 with value: 0.7433739687024168.
-[I 2026-02-02 15:54:33,313] Trial 17 finished with value: 0.7176131040298408 and parameters: {'n_estimators': 505, 'max_depth': 6, 'learning_rate': 0.019429709427516678, 'subsample': 0.7081025970827716, 'colsample_bytree': 0.7733363437046834, 'min_child_weight': 4, 'gamma': 0.06416965088409016, 'reg_alpha': 0.6877227416064102, 'reg_lambda': 0.12777816433425576}. Best is trial 11 with value: 0.7433739687024168.
-[I 2026-02-02 15:56:27,356] Trial 18 finished with value: 0.7399129608908641 and parameters: {'n_estimators': 1845, 'max_depth': 4, 'learning_rate': 0.020038260312712823, 'subsample': 0.6004530946470283, 'colsample_bytree': 0.8568736195762812, 'min_child_weight': 6, 'gamma': 0.161344200648966, 'reg_alpha': 0.09017405294742786, 'reg_lambda': 0.01326551708235706}. Best is trial 11 with value: 0.7433739687024168.
-[I 2026-02-02 15:57:55,275] Trial 19 finished with value: 0.7191942807639059 and parameters: {'n_estimators': 1512, 'max_depth': 6, 'learning_rate': 0.04283045501185134, 'subsample': 0.8721147503213408, 'colsample_bytree': 0.9374949731145348, 'min_child_weight': 5, 'gamma': 0.050887573538383794, 'reg_alpha': 0.5166558726836805, 'reg_lambda': 0.625943608957336}. Best is trial 11 with value: 0.7433739687024168.
-[I 2026-02-02 15:59:33,155] Trial 20 finished with value: 0.7156347316179704 and parameters: {'n_estimators': 1794, 'max_depth': 3, 'learning_rate': 0.1859011281635771, 'subsample': 0.7534314996425352, 'colsample_bytree': 0.8562488669919157, 'min_child_weight': 4, 'gamma': 0.09974846859089753, 'reg_alpha': 0.3497882927964666, 'reg_lambda': 0.9938427850497087}. Best is trial 11 with value: 0.7433739687024168.
-[I 2026-02-02 16:01:32,250] Trial 21 finished with value: 0.7427963883712134 and parameters: {'n_estimators': 1948, 'max_depth': 3, 'learning_rate': 0.028384751942895418, 'subsample': 0.7472339946700939, 'colsample_bytree': 0.8096183749033755, 'min_child_weight': 5, 'gamma': 0.004302103235114332, 'reg_alpha': 0.6134997141901993, 'reg_lambda': 0.005331684949944663}. Best is trial 11 with value: 0.7433739687024168.
-[I 2026-02-02 16:03:42,456] Trial 22 finished with value: 0.735402773962069 and parameters: {'n_estimators': 1973, 'max_depth': 4, 'learning_rate': 0.024396919483262985, 'subsample': 0.7993599823182003, 'colsample_bytree': 0.7780515921528441, 'min_child_weight': 6, 'gamma': 0.006634230152268776, 'reg_alpha': 0.5891861938555278, 'reg_lambda': 0.12403632248112112}. Best is trial 11 with value: 0.7433739687024168.
-[I 2026-02-02 16:05:18,815] Trial 23 finished with value: 0.7391646805789784 and parameters: {'n_estimators': 1602, 'max_depth': 3, 'learning_rate': 0.04104030329747073, 'subsample': 0.6899994230843927, 'colsample_bytree': 0.816015002034541, 'min_child_weight': 4, 'gamma': 0.06699603867729564, 'reg_alpha': 0.7573147661433608, 'reg_lambda': 0.2673416890185057}. Best is trial 11 with value: 0.7433739687024168.
-[I 2026-02-02 16:07:15,389] Trial 24 finished with value: 0.7403455340048423 and parameters: {'n_estimators': 1778, 'max_depth': 4, 'learning_rate': 0.01606325397685403, 'subsample': 0.7486227209707547, 'colsample_bytree': 0.7413673006546474, 'min_child_weight': 5, 'gamma': 0.04756252361006709, 'reg_alpha': 0.4628442668667298, 'reg_lambda': 0.014146000363971765}. Best is trial 11 with value: 0.7433739687024168.
-[I 2026-02-02 16:09:07,738] Trial 25 finished with value: 0.7403696481252713 and parameters: {'n_estimators': 2000, 'max_depth': 3, 'learning_rate': 0.03594012910898712, 'subsample': 0.7939330210510193, 'colsample_bytree': 0.8862860858246514, 'min_child_weight': 3, 'gamma': 0.12872657845856375, 'reg_alpha': 0.6861375624525233, 'reg_lambda': 0.11108782394405001}. Best is trial 11 with value: 0.7433739687024168.
-[I 2026-02-02 16:10:51,824] Trial 26 finished with value: 0.7374489249683489 and parameters: {'n_estimators': 1514, 'max_depth': 4, 'learning_rate': 0.023746925547754816, 'subsample': 0.7366195675267279, 'colsample_bytree': 0.8384210367988653, 'min_child_weight': 6, 'gamma': 0.0033449617564720313, 'reg_alpha': 0.5304123492280809, 'reg_lambda': 0.19079284814571965}. Best is trial 11 with value: 0.7433739687024168.
-[I 2026-02-02 16:12:31,932] Trial 27 finished with value: 0.734355595609926 and parameters: {'n_estimators': 1833, 'max_depth': 3, 'learning_rate': 0.052953958753617296, 'subsample': 0.6392232166430489, 'colsample_bytree': 0.7880196908999109, 'min_child_weight': 4, 'gamma': 0.21701376875402517, 'reg_alpha': 0.2410244149082369, 'reg_lambda': 0.32421027778035405}. Best is trial 11 with value: 0.7433739687024168.
-[I 2026-02-02 16:13:02,467] Trial 28 finished with value: 0.6611480314118585 and parameters: {'n_estimators': 346, 'max_depth': 6, 'learning_rate': 0.010100147138674007, 'subsample': 0.6983770129789415, 'colsample_bytree': 0.7498262247471129, 'min_child_weight': 5, 'gamma': 0.2839749718347441, 'reg_alpha': 0.40024778622927526, 'reg_lambda': 0.0750068720479742}. Best is trial 11 with value: 0.7433739687024168.
-[I 2026-02-02 16:14:12,984] Trial 29 finished with value: 0.7229216179314919 and parameters: {'n_estimators': 1138, 'max_depth': 5, 'learning_rate': 0.04927107933877789, 'subsample': 0.8334437564712256, 'colsample_bytree': 0.9698136655895839, 'min_child_weight': 7, 'gamma': 0.04292793594321569, 'reg_alpha': 0.8211573126513737, 'reg_lambda': 0.6528848481634129}. Best is trial 11 with value: 0.7433739687024168.
-[I 2026-02-02 16:15:58,319] Trial 30 finished with value: 0.7405159957406822 and parameters: {'n_estimators': 1615, 'max_depth': 4, 'learning_rate': 0.016656110171927148, 'subsample': 0.768292831789803, 'colsample_bytree': 0.7104706412469445, 'min_child_weight': 6, 'gamma': 0.0877137075298182, 'reg_alpha': 0.19009183923632034, 'reg_lambda': 0.16104459360462245}. Best is trial 11 with value: 0.7433739687024168.
-[I 2026-02-02 16:17:50,143] Trial 31 finished with value: 0.7447979161192437 and parameters: {'n_estimators': 1884, 'max_depth': 3, 'learning_rate': 0.029834852525248187, 'subsample': 0.7411212928939714, 'colsample_bytree': 0.8145160948656125, 'min_child_weight': 5, 'gamma': 0.0010633547346165628, 'reg_alpha': 0.6214742337504001, 'reg_lambda': 0.04666953660918882}. Best is trial 31 with value: 0.7447979161192437.
-[I 2026-02-02 16:19:44,796] Trial 32 finished with value: 0.7441203477358708 and parameters: {'n_estimators': 1925, 'max_depth': 3, 'learning_rate': 0.030872685342118584, 'subsample': 0.7296962257291691, 'colsample_bytree': 0.8080603038332687, 'min_child_weight': 5, 'gamma': 0.03939927949836644, 'reg_alpha': 0.7134138716690809, 'reg_lambda': 0.0006672782221930334}. Best is trial 31 with value: 0.7447979161192437.
-[I 2026-02-02 16:21:31,129] Trial 33 finished with value: 0.7402491927274143 and parameters: {'n_estimators': 1758, 'max_depth': 3, 'learning_rate': 0.03262736714201613, 'subsample': 0.6709590571984513, 'colsample_bytree': 0.7960689343718999, 'min_child_weight': 4, 'gamma': 0.03436799937543436, 'reg_alpha': 0.70939942218615, 'reg_lambda': 0.07960381362115386}. Best is trial 31 with value: 0.7447979161192437.
-[I 2026-02-02 16:23:16,467] Trial 34 finished with value: 0.7308652874093056 and parameters: {'n_estimators': 1874, 'max_depth': 4, 'learning_rate': 0.06577759260987597, 'subsample': 0.8154907980613928, 'colsample_bytree': 0.8397049883771047, 'min_child_weight': 5, 'gamma': 0.03325644989816003, 'reg_alpha': 0.6224137012542038, 'reg_lambda': 0.2495416424675658}. Best is trial 31 with value: 0.7447979161192437.
-[I 2026-02-02 16:24:49,791] Trial 35 finished with value: 0.7394044022487918 and parameters: {'n_estimators': 1478, 'max_depth': 3, 'learning_rate': 0.022548435553308377, 'subsample': 0.7751149112569193, 'colsample_bytree': 0.8783547221751054, 'min_child_weight': 3, 'gamma': 0.0019761605753755296, 'reg_alpha': 0.8319704325716986, 'reg_lambda': 0.44251574724866316}. Best is trial 31 with value: 0.7447979161192437.
-[I 2026-02-02 16:25:48,435] Trial 36 finished with value: 0.7086982581321817 and parameters: {'n_estimators': 931, 'max_depth': 3, 'learning_rate': 0.015333826799217685, 'subsample': 0.7160307219223031, 'colsample_bytree': 0.7612864561769577, 'min_child_weight': 4, 'gamma': 0.06733794363632746, 'reg_alpha': 0.7425751262887258, 'reg_lambda': 0.06527722053840614}. Best is trial 31 with value: 0.7447979161192437.
-[I 2026-02-02 16:27:31,711] Trial 37 finished with value: 0.7123734604112447 and parameters: {'n_estimators': 1892, 'max_depth': 5, 'learning_rate': 0.03242302757490826, 'subsample': 0.639175893334211, 'colsample_bytree': 0.7006370428783895, 'min_child_weight': 2, 'gamma': 0.36538968490049406, 'reg_alpha': 0.5719517468692625, 'reg_lambda': 0.5341568918924648}. Best is trial 31 with value: 0.7447979161192437.
-[I 2026-02-02 16:29:01,489] Trial 38 finished with value: 0.7065590860012106 and parameters: {'n_estimators': 1700, 'max_depth': 4, 'learning_rate': 0.0797715515537887, 'subsample': 0.8460637947266508, 'colsample_bytree': 0.8334108186548685, 'min_child_weight': 6, 'gamma': 0.4460646643540176, 'reg_alpha': 0.6421655551461292, 'reg_lambda': 0.16333016420504112}. Best is trial 31 with value: 0.7447979161192437.
-[I 2026-02-02 16:30:30,476] Trial 39 finished with value: 0.6931914317781569 and parameters: {'n_estimators': 1368, 'max_depth': 10, 'learning_rate': 0.04578754897856415, 'subsample': 0.6868412962578083, 'colsample_bytree': 0.8969312545364934, 'min_child_weight': 5, 'gamma': 0.029950927274439494, 'reg_alpha': 0.45946491698666053, 'reg_lambda': 0.6997154359563418}. Best is trial 31 with value: 0.7447979161192437.
-[I 2026-02-02 16:31:44,650] Trial 40 finished with value: 0.6583641577436656 and parameters: {'n_estimators': 1386, 'max_depth': 8, 'learning_rate': 0.2974053007288462, 'subsample': 0.7667825080327568, 'colsample_bytree': 0.7959512747424754, 'min_child_weight': 5, 'gamma': 0.07581709695184642, 'reg_alpha': 0.7964126078873263, 'reg_lambda': 0.4013557418529664}. Best is trial 31 with value: 0.7447979161192437.
-[I 2026-02-02 16:33:44,003] Trial 41 finished with value: 0.7460943883336981 and parameters: {'n_estimators': 1925, 'max_depth': 3, 'learning_rate': 0.027454883130643235, 'subsample': 0.7338818649963949, 'colsample_bytree': 0.8088769860457204, 'min_child_weight': 5, 'gamma': 0.02918218090531728, 'reg_alpha': 0.014800630642531343, 'reg_lambda': 0.001699768165375047}. Best is trial 41 with value: 0.7460943883336981.
-[I 2026-02-02 16:35:45,537] Trial 42 finished with value: 0.7414218263951987 and parameters: {'n_estimators': 1903, 'max_depth': 3, 'learning_rate': 0.030487215509222582, 'subsample': 0.7314837475894875, 'colsample_bytree': 0.797429247820379, 'min_child_weight': 5, 'gamma': 0.026716467215117404, 'reg_alpha': 0.7166858581350686, 'reg_lambda': 0.23433424909534145}. Best is trial 41 with value: 0.7460943883336981.
-[I 2026-02-02 16:37:26,262] Trial 43 finished with value: 0.744735023612623 and parameters: {'n_estimators': 1583, 'max_depth': 3, 'learning_rate': 0.03729536819190406, 'subsample': 0.7835175558883805, 'colsample_bytree': 0.7302931428650937, 'min_child_weight': 4, 'gamma': 0.022095353897112636, 'reg_alpha': 0.6577435855911016, 'reg_lambda': 0.0654186686011689}. Best is trial 41 with value: 0.7460943883336981.
-[I 2026-02-02 16:39:13,428] Trial 44 finished with value: 0.7316487737856188 and parameters: {'n_estimators': 1796, 'max_depth': 4, 'learning_rate': 0.0382484660604533, 'subsample': 0.7875141953408362, 'colsample_bytree': 0.6296291371341683, 'min_child_weight': 4, 'gamma': 0.05786419034513414, 'reg_alpha': 0.6646055307660337, 'reg_lambda': 0.05614282119341378}. Best is trial 41 with value: 0.7460943883336981.
-[I 2026-02-02 16:40:43,806] Trial 45 finished with value: 0.725057908535438 and parameters: {'n_estimators': 1605, 'max_depth': 5, 'learning_rate': 0.07038908179944534, 'subsample': 0.8148976082972871, 'colsample_bytree': 0.7301906662915154, 'min_child_weight': 3, 'gamma': 0.10931231906914485, 'reg_alpha': 0.034682086983585755, 'reg_lambda': 0.1632401141064882}. Best is trial 41 with value: 0.7460943883336981.
-[I 2026-02-02 16:42:04,731] Trial 46 finished with value: 0.7338677116852905 and parameters: {'n_estimators': 1270, 'max_depth': 3, 'learning_rate': 0.02124146489544771, 'subsample': 0.7622199404592858, 'colsample_bytree': 0.688326585600348, 'min_child_weight': 4, 'gamma': 0.030344138025170685, 'reg_alpha': 0.9232470371148382, 'reg_lambda': 0.08248654828358438}. Best is trial 41 with value: 0.7460943883336981.
-[I 2026-02-02 16:43:52,813] Trial 47 finished with value: 0.7226114248823834 and parameters: {'n_estimators': 1996, 'max_depth': 3, 'learning_rate': 0.1472329029509108, 'subsample': 0.6645961820394605, 'colsample_bytree': 0.655249280363061, 'min_child_weight': 2, 'gamma': 0.14251910485795088, 'reg_alpha': 0.5802619652220039, 'reg_lambda': 0.04374079181528785}. Best is trial 41 with value: 0.7460943883336981.
-[I 2026-02-02 16:45:28,891] Trial 48 finished with value: 0.7334191209246474 and parameters: {'n_estimators': 1571, 'max_depth': 4, 'learning_rate': 0.03570367577370723, 'subsample': 0.7274974666489646, 'colsample_bytree': 0.7464920321973186, 'min_child_weight': 6, 'gamma': 0.09010267200022948, 'reg_alpha': 0.8587300775944456, 'reg_lambda': 0.13927058061767386}. Best is trial 41 with value: 0.7460943883336981.
-[I 2026-02-02 16:47:09,456] Trial 49 finished with value: 0.680464142813188 and parameters: {'n_estimators': 1707, 'max_depth': 9, 'learning_rate': 0.025773830817862425, 'subsample': 0.9385448512112798, 'colsample_bytree': 0.851574945347434, 'min_child_weight': 4, 'gamma': 0.17817103925419225, 'reg_alpha': 0.5003745377042642, 'reg_lambda': 0.19443269593239235}. Best is trial 41 with value: 0.7460943883336981.
-
-================================================================================
-Optimization Complete
-================================================================================
-Best r2: 0.746094
-
-Best hyperparameters:
-  n_estimators: 1925
-  max_depth: 3
-  learning_rate: 0.027454883130643235
-  subsample: 0.7338818649963949
-  colsample_bytree: 0.8088769860457204
-  min_child_weight: 5
-  gamma: 0.02918218090531728
-  reg_alpha: 0.014800630642531343
-  reg_lambda: 0.001699768165375047
-   Hyperparameters saved to peptide_full_results/best_hyperparameters.json
-
-5. Training final model...
-[0]	validation_0-rmse:0.62083
-[1]	validation_0-rmse:0.61613
-[2]	validation_0-rmse:0.61200
-[3]	validation_0-rmse:0.60791
-[4]	validation_0-rmse:0.60415
-[5]	validation_0-rmse:0.60086
-[6]	validation_0-rmse:0.59704
-[7]	validation_0-rmse:0.59320
-[8]	validation_0-rmse:0.58935
-[9]	validation_0-rmse:0.58561
-[10]	validation_0-rmse:0.58264
-[11]	validation_0-rmse:0.57902
-[12]	validation_0-rmse:0.57600
-[13]	validation_0-rmse:0.57285
-[14]	validation_0-rmse:0.57011
-[15]	validation_0-rmse:0.56742
-[16]	validation_0-rmse:0.56474
-[17]	validation_0-rmse:0.56196
-[18]	validation_0-rmse:0.55792
-[19]	validation_0-rmse:0.55491
-[20]	validation_0-rmse:0.55303
-[21]	validation_0-rmse:0.55033
-[22]	validation_0-rmse:0.54777
-[23]	validation_0-rmse:0.54565
-[24]	validation_0-rmse:0.54338
-[25]	validation_0-rmse:0.54144
-[26]	validation_0-rmse:0.53859
-[27]	validation_0-rmse:0.53648
-[28]	validation_0-rmse:0.53445
-[29]	validation_0-rmse:0.53174
-[30]	validation_0-rmse:0.52899
-[31]	validation_0-rmse:0.52710
-[32]	validation_0-rmse:0.52491
-[33]	validation_0-rmse:0.52303
-[34]	validation_0-rmse:0.52090
-[35]	validation_0-rmse:0.51956
-[36]	validation_0-rmse:0.51783
-[37]	validation_0-rmse:0.51612
-[38]	validation_0-rmse:0.51439
-[39]	validation_0-rmse:0.51272
-[40]	validation_0-rmse:0.51110
-[41]	validation_0-rmse:0.50942
-[42]	validation_0-rmse:0.50719
-[43]	validation_0-rmse:0.50544
-[44]	validation_0-rmse:0.50387
-[45]	validation_0-rmse:0.50187
-[46]	validation_0-rmse:0.50090
-[47]	validation_0-rmse:0.49933
-[48]	validation_0-rmse:0.49773
-[49]	validation_0-rmse:0.49586
-[50]	validation_0-rmse:0.49411
-[51]	validation_0-rmse:0.49287
-[52]	validation_0-rmse:0.49095
-[53]	validation_0-rmse:0.48965
-[54]	validation_0-rmse:0.48848
-[55]	validation_0-rmse:0.48699
-[56]	validation_0-rmse:0.48564
-[57]	validation_0-rmse:0.48424
-[58]	validation_0-rmse:0.48268
-[59]	validation_0-rmse:0.48116
-[60]	validation_0-rmse:0.47934
-[61]	validation_0-rmse:0.47802
-[62]	validation_0-rmse:0.47613
-[63]	validation_0-rmse:0.47461
-[64]	validation_0-rmse:0.47286
-[65]	validation_0-rmse:0.47145
-[66]	validation_0-rmse:0.47068
-[67]	validation_0-rmse:0.46948
-[68]	validation_0-rmse:0.46795
-[69]	validation_0-rmse:0.46688
-[70]	validation_0-rmse:0.46554
-[71]	validation_0-rmse:0.46455
-[72]	validation_0-rmse:0.46341
-[73]	validation_0-rmse:0.46252
-[74]	validation_0-rmse:0.46135
-[75]	validation_0-rmse:0.46057
-[76]	validation_0-rmse:0.45872
-[77]	validation_0-rmse:0.45752
-[78]	validation_0-rmse:0.45623
-[79]	validation_0-rmse:0.45541
-[80]	validation_0-rmse:0.45416
-[81]	validation_0-rmse:0.45344
-[82]	validation_0-rmse:0.45256
-[83]	validation_0-rmse:0.45140
-[84]	validation_0-rmse:0.45048
-[85]	validation_0-rmse:0.44995
-[86]	validation_0-rmse:0.44851
-[87]	validation_0-rmse:0.44760
-[88]	validation_0-rmse:0.44634
-[89]	validation_0-rmse:0.44564
-[90]	validation_0-rmse:0.44485
-[91]	validation_0-rmse:0.44360
-[92]	validation_0-rmse:0.44207
-[93]	validation_0-rmse:0.44086
-[94]	validation_0-rmse:0.44018
-[95]	validation_0-rmse:0.43935
-[96]	validation_0-rmse:0.43859
-[97]	validation_0-rmse:0.43781
-[98]	validation_0-rmse:0.43747
-[99]	validation_0-rmse:0.43671
-[100]	validation_0-rmse:0.43651
-[101]	validation_0-rmse:0.43594
-[102]	validation_0-rmse:0.43481
-[103]	validation_0-rmse:0.43399
-[104]	validation_0-rmse:0.43331
-[105]	validation_0-rmse:0.43222
-[106]	validation_0-rmse:0.43134
-[107]	validation_0-rmse:0.43041
-[108]	validation_0-rmse:0.42995
-[109]	validation_0-rmse:0.42854
-[110]	validation_0-rmse:0.42774
-[111]	validation_0-rmse:0.42673
-[112]	validation_0-rmse:0.42619
-[113]	validation_0-rmse:0.42503
-[114]	validation_0-rmse:0.42436
-[115]	validation_0-rmse:0.42369
-[116]	validation_0-rmse:0.42289
-[117]	validation_0-rmse:0.42186
-[118]	validation_0-rmse:0.42112
-[119]	validation_0-rmse:0.42055
-[120]	validation_0-rmse:0.42041
-[121]	validation_0-rmse:0.41947
-[122]	validation_0-rmse:0.41828
-[123]	validation_0-rmse:0.41771
-[124]	validation_0-rmse:0.41667
-[125]	validation_0-rmse:0.41637
-[126]	validation_0-rmse:0.41605
-[127]	validation_0-rmse:0.41540
-[128]	validation_0-rmse:0.41464
-[129]	validation_0-rmse:0.41431
-[130]	validation_0-rmse:0.41374
-[131]	validation_0-rmse:0.41304
-[132]	validation_0-rmse:0.41254
-[133]	validation_0-rmse:0.41180
-[134]	validation_0-rmse:0.41089
-[135]	validation_0-rmse:0.41022
-[136]	validation_0-rmse:0.40953
-[137]	validation_0-rmse:0.40894
-[138]	validation_0-rmse:0.40818
-[139]	validation_0-rmse:0.40747
-[140]	validation_0-rmse:0.40701
-[141]	validation_0-rmse:0.40652
-[142]	validation_0-rmse:0.40591
-[143]	validation_0-rmse:0.40533
-[144]	validation_0-rmse:0.40452
-[145]	validation_0-rmse:0.40431
-[146]	validation_0-rmse:0.40382
-[147]	validation_0-rmse:0.40347
-[148]	validation_0-rmse:0.40309
-[149]	validation_0-rmse:0.40209
-[150]	validation_0-rmse:0.40150
-[151]	validation_0-rmse:0.40113
-[152]	validation_0-rmse:0.40047
-[153]	validation_0-rmse:0.40008
-[154]	validation_0-rmse:0.39968
-[155]	validation_0-rmse:0.39909
-[156]	validation_0-rmse:0.39860
-[157]	validation_0-rmse:0.39835
-[158]	validation_0-rmse:0.39788
-[159]	validation_0-rmse:0.39740
-[160]	validation_0-rmse:0.39717
-[161]	validation_0-rmse:0.39671
-[162]	validation_0-rmse:0.39631
-[163]	validation_0-rmse:0.39565
-[164]	validation_0-rmse:0.39504
-[165]	validation_0-rmse:0.39440
-[166]	validation_0-rmse:0.39407
-[167]	validation_0-rmse:0.39394
-[168]	validation_0-rmse:0.39342
-[169]	validation_0-rmse:0.39305
-[170]	validation_0-rmse:0.39275
-[171]	validation_0-rmse:0.39197
-[172]	validation_0-rmse:0.39154
-[173]	validation_0-rmse:0.39097
-[174]	validation_0-rmse:0.39068
-[175]	validation_0-rmse:0.39051
-[176]	validation_0-rmse:0.39000
-[177]	validation_0-rmse:0.38973
-[178]	validation_0-rmse:0.38926
-[179]	validation_0-rmse:0.38850
-[180]	validation_0-rmse:0.38805
-[181]	validation_0-rmse:0.38735
-[182]	validation_0-rmse:0.38701
-[183]	validation_0-rmse:0.38649
-[184]	validation_0-rmse:0.38588
-[185]	validation_0-rmse:0.38565
-[186]	validation_0-rmse:0.38514
-[187]	validation_0-rmse:0.38461
-[188]	validation_0-rmse:0.38417
-[189]	validation_0-rmse:0.38384
-[190]	validation_0-rmse:0.38345
-[191]	validation_0-rmse:0.38307
-[192]	validation_0-rmse:0.38223
-[193]	validation_0-rmse:0.38174
-[194]	validation_0-rmse:0.38135
-[195]	validation_0-rmse:0.38112
-[196]	validation_0-rmse:0.38077
-[197]	validation_0-rmse:0.38035
-[198]	validation_0-rmse:0.38010
-[199]	validation_0-rmse:0.37940
-[200]	validation_0-rmse:0.37911
-[201]	validation_0-rmse:0.37894
-[202]	validation_0-rmse:0.37888
-[203]	validation_0-rmse:0.37860
-[204]	validation_0-rmse:0.37794
-[205]	validation_0-rmse:0.37759
-[206]	validation_0-rmse:0.37730
-[207]	validation_0-rmse:0.37706
-[208]	validation_0-rmse:0.37656
-[209]	validation_0-rmse:0.37626
-[210]	validation_0-rmse:0.37591
-[211]	validation_0-rmse:0.37574
-[212]	validation_0-rmse:0.37523
-[213]	validation_0-rmse:0.37516
-[214]	validation_0-rmse:0.37477
-[215]	validation_0-rmse:0.37447
-[216]	validation_0-rmse:0.37420
-[217]	validation_0-rmse:0.37392
-[218]	validation_0-rmse:0.37346
-[219]	validation_0-rmse:0.37321
-[220]	validation_0-rmse:0.37296
-[221]	validation_0-rmse:0.37293
-[222]	validation_0-rmse:0.37281
-[223]	validation_0-rmse:0.37271
-[224]	validation_0-rmse:0.37232
-[225]	validation_0-rmse:0.37186
-[226]	validation_0-rmse:0.37176
-[227]	validation_0-rmse:0.37101
-[228]	validation_0-rmse:0.37066
-[229]	validation_0-rmse:0.37027
-[230]	validation_0-rmse:0.36998
-[231]	validation_0-rmse:0.36981
-[232]	validation_0-rmse:0.36941
-[233]	validation_0-rmse:0.36937
-[234]	validation_0-rmse:0.36895
-[235]	validation_0-rmse:0.36852
-[236]	validation_0-rmse:0.36840
-[237]	validation_0-rmse:0.36806
-[238]	validation_0-rmse:0.36783
-[239]	validation_0-rmse:0.36748
-[240]	validation_0-rmse:0.36720
-[241]	validation_0-rmse:0.36681
-[242]	validation_0-rmse:0.36664
-[243]	validation_0-rmse:0.36640
-[244]	validation_0-rmse:0.36625
-[245]	validation_0-rmse:0.36596
-[246]	validation_0-rmse:0.36601
-[247]	validation_0-rmse:0.36582
-[248]	validation_0-rmse:0.36589
-[249]	validation_0-rmse:0.36581
-[250]	validation_0-rmse:0.36537
-[251]	validation_0-rmse:0.36499
-[252]	validation_0-rmse:0.36476
-[253]	validation_0-rmse:0.36453
-[254]	validation_0-rmse:0.36420
-[255]	validation_0-rmse:0.36410
-[256]	validation_0-rmse:0.36394
-[257]	validation_0-rmse:0.36357
-[258]	validation_0-rmse:0.36337
-[259]	validation_0-rmse:0.36325
-[260]	validation_0-rmse:0.36319
-[261]	validation_0-rmse:0.36298
-[262]	validation_0-rmse:0.36287
-[263]	validation_0-rmse:0.36252
-[264]	validation_0-rmse:0.36219
-[265]	validation_0-rmse:0.36220
-[266]	validation_0-rmse:0.36227
-[267]	validation_0-rmse:0.36212
-[268]	validation_0-rmse:0.36168
-[269]	validation_0-rmse:0.36156
-[270]	validation_0-rmse:0.36144
-[271]	validation_0-rmse:0.36129
-[272]	validation_0-rmse:0.36118
-[273]	validation_0-rmse:0.36091
-[274]	validation_0-rmse:0.36065
-[275]	validation_0-rmse:0.36053
-[276]	validation_0-rmse:0.36055
-[277]	validation_0-rmse:0.36041
-[278]	validation_0-rmse:0.36032
-[279]	validation_0-rmse:0.36017
-[280]	validation_0-rmse:0.36003
-[281]	validation_0-rmse:0.35975
-[282]	validation_0-rmse:0.35967
-[283]	validation_0-rmse:0.35936
-[284]	validation_0-rmse:0.35949
-[285]	validation_0-rmse:0.35942
-[286]	validation_0-rmse:0.35897
-[287]	validation_0-rmse:0.35893
-[288]	validation_0-rmse:0.35870
-[289]	validation_0-rmse:0.35868
-[290]	validation_0-rmse:0.35864
-[291]	validation_0-rmse:0.35853
-[292]	validation_0-rmse:0.35819
-[293]	validation_0-rmse:0.35795
-[294]	validation_0-rmse:0.35772
-[295]	validation_0-rmse:0.35759
-[296]	validation_0-rmse:0.35731
-[297]	validation_0-rmse:0.35712
-[298]	validation_0-rmse:0.35704
-[299]	validation_0-rmse:0.35680
-[300]	validation_0-rmse:0.35659
-[301]	validation_0-rmse:0.35653
-[302]	validation_0-rmse:0.35623
-[303]	validation_0-rmse:0.35613
-[304]	validation_0-rmse:0.35612
-[305]	validation_0-rmse:0.35593
-[306]	validation_0-rmse:0.35565
-[307]	validation_0-rmse:0.35565
-[308]	validation_0-rmse:0.35532
-[309]	validation_0-rmse:0.35525
-[310]	validation_0-rmse:0.35512
-[311]	validation_0-rmse:0.35502
-[312]	validation_0-rmse:0.35482
-[313]	validation_0-rmse:0.35472
-[314]	validation_0-rmse:0.35442
-[315]	validation_0-rmse:0.35423
-[316]	validation_0-rmse:0.35397
-[317]	validation_0-rmse:0.35381
-[318]	validation_0-rmse:0.35371
-[319]	validation_0-rmse:0.35343
-[320]	validation_0-rmse:0.35325
-[321]	validation_0-rmse:0.35303
-[322]	validation_0-rmse:0.35287
-[323]	validation_0-rmse:0.35273
-[324]	validation_0-rmse:0.35271
-[325]	validation_0-rmse:0.35251
-[326]	validation_0-rmse:0.35232
-[327]	validation_0-rmse:0.35226
-[328]	validation_0-rmse:0.35214
-[329]	validation_0-rmse:0.35187
-[330]	validation_0-rmse:0.35176
-[331]	validation_0-rmse:0.35160
-[332]	validation_0-rmse:0.35132
-[333]	validation_0-rmse:0.35124
-[334]	validation_0-rmse:0.35110
-[335]	validation_0-rmse:0.35090
-[336]	validation_0-rmse:0.35072
-[337]	validation_0-rmse:0.35038
-[338]	validation_0-rmse:0.35028
-[339]	validation_0-rmse:0.35011
-[340]	validation_0-rmse:0.34985
-[341]	validation_0-rmse:0.34976
-[342]	validation_0-rmse:0.34970
-[343]	validation_0-rmse:0.34952
-[344]	validation_0-rmse:0.34946
-[345]	validation_0-rmse:0.34939
-[346]	validation_0-rmse:0.34938
-[347]	validation_0-rmse:0.34925
-[348]	validation_0-rmse:0.34915
-[349]	validation_0-rmse:0.34904
-[350]	validation_0-rmse:0.34873
-[351]	validation_0-rmse:0.34873
-[352]	validation_0-rmse:0.34858
-[353]	validation_0-rmse:0.34837
-[354]	validation_0-rmse:0.34790
-[355]	validation_0-rmse:0.34778
-[356]	validation_0-rmse:0.34767
-[357]	validation_0-rmse:0.34759
-[358]	validation_0-rmse:0.34748
-[359]	validation_0-rmse:0.34733
-[360]	validation_0-rmse:0.34704
-[361]	validation_0-rmse:0.34686
-[362]	validation_0-rmse:0.34669
-[363]	validation_0-rmse:0.34669
-[364]	validation_0-rmse:0.34648
-[365]	validation_0-rmse:0.34639
-[366]	validation_0-rmse:0.34616
-[367]	validation_0-rmse:0.34600
-[368]	validation_0-rmse:0.34578
-[369]	validation_0-rmse:0.34573
-[370]	validation_0-rmse:0.34561
-[371]	validation_0-rmse:0.34545
-[372]	validation_0-rmse:0.34531
-[373]	validation_0-rmse:0.34521
-[374]	validation_0-rmse:0.34516
-[375]	validation_0-rmse:0.34506
-[376]	validation_0-rmse:0.34515
-[377]	validation_0-rmse:0.34504
-[378]	validation_0-rmse:0.34483
-[379]	validation_0-rmse:0.34470
-[380]	validation_0-rmse:0.34459
-[381]	validation_0-rmse:0.34429
-[382]	validation_0-rmse:0.34420
-[383]	validation_0-rmse:0.34409
-[384]	validation_0-rmse:0.34383
-[385]	validation_0-rmse:0.34370
-[386]	validation_0-rmse:0.34365
-[387]	validation_0-rmse:0.34353
-[388]	validation_0-rmse:0.34338
-[389]	validation_0-rmse:0.34324
-[390]	validation_0-rmse:0.34328
-[391]	validation_0-rmse:0.34302
-[392]	validation_0-rmse:0.34301
-[393]	validation_0-rmse:0.34293
-[394]	validation_0-rmse:0.34273
-[395]	validation_0-rmse:0.34277
-[396]	validation_0-rmse:0.34251
-[397]	validation_0-rmse:0.34239
-[398]	validation_0-rmse:0.34228
-[399]	validation_0-rmse:0.34216
-[400]	validation_0-rmse:0.34209
-[401]	validation_0-rmse:0.34203
-[402]	validation_0-rmse:0.34195
-[403]	validation_0-rmse:0.34174
-[404]	validation_0-rmse:0.34159
-[405]	validation_0-rmse:0.34132
-[406]	validation_0-rmse:0.34138
-[407]	validation_0-rmse:0.34119
-[408]	validation_0-rmse:0.34110
-[409]	validation_0-rmse:0.34098
-[410]	validation_0-rmse:0.34090
-[411]	validation_0-rmse:0.34079
-[412]	validation_0-rmse:0.34067
-[413]	validation_0-rmse:0.34060
-[414]	validation_0-rmse:0.34054
-[415]	validation_0-rmse:0.34049
-[416]	validation_0-rmse:0.34041
-[417]	validation_0-rmse:0.34011
-[418]	validation_0-rmse:0.34007
-[419]	validation_0-rmse:0.34005
-[420]	validation_0-rmse:0.34001
-[421]	validation_0-rmse:0.33995
-[422]	validation_0-rmse:0.33974
-[423]	validation_0-rmse:0.33989
-[424]	validation_0-rmse:0.33978
-[425]	validation_0-rmse:0.33974
-[426]	validation_0-rmse:0.33967
-[427]	validation_0-rmse:0.33957
-[428]	validation_0-rmse:0.33947
-[429]	validation_0-rmse:0.33947
-[430]	validation_0-rmse:0.33939
-[431]	validation_0-rmse:0.33939
-[432]	validation_0-rmse:0.33951
-[433]	validation_0-rmse:0.33934
-[434]	validation_0-rmse:0.33930
-[435]	validation_0-rmse:0.33920
-[436]	validation_0-rmse:0.33898
-[437]	validation_0-rmse:0.33895
-[438]	validation_0-rmse:0.33897
-[439]	validation_0-rmse:0.33854
-[440]	validation_0-rmse:0.33854
-[441]	validation_0-rmse:0.33849
-[442]	validation_0-rmse:0.33839
-[443]	validation_0-rmse:0.33831
-[444]	validation_0-rmse:0.33821
-[445]	validation_0-rmse:0.33813
-[446]	validation_0-rmse:0.33807
-[447]	validation_0-rmse:0.33784
-[448]	validation_0-rmse:0.33781
-[449]	validation_0-rmse:0.33761
-[450]	validation_0-rmse:0.33754
-[451]	validation_0-rmse:0.33745
-[452]	validation_0-rmse:0.33739
-[453]	validation_0-rmse:0.33730
-[454]	validation_0-rmse:0.33737
-[455]	validation_0-rmse:0.33728
-[456]	validation_0-rmse:0.33734
-[457]	validation_0-rmse:0.33719
-[458]	validation_0-rmse:0.33723
-[459]	validation_0-rmse:0.33717
-[460]	validation_0-rmse:0.33700
-[461]	validation_0-rmse:0.33696
-[462]	validation_0-rmse:0.33685
-[463]	validation_0-rmse:0.33675
-[464]	validation_0-rmse:0.33661
-[465]	validation_0-rmse:0.33628
-[466]	validation_0-rmse:0.33617
-[467]	validation_0-rmse:0.33603
-[468]	validation_0-rmse:0.33610
-[469]	validation_0-rmse:0.33599
-[470]	validation_0-rmse:0.33599
-[471]	validation_0-rmse:0.33593
-[472]	validation_0-rmse:0.33571
-[473]	validation_0-rmse:0.33570
-[474]	validation_0-rmse:0.33558
-[475]	validation_0-rmse:0.33549
-[476]	validation_0-rmse:0.33542
-[477]	validation_0-rmse:0.33541
-[478]	validation_0-rmse:0.33545
-[479]	validation_0-rmse:0.33536
-[480]	validation_0-rmse:0.33507
-[481]	validation_0-rmse:0.33504
-[482]	validation_0-rmse:0.33480
-[483]	validation_0-rmse:0.33471
-[484]	validation_0-rmse:0.33458
-[485]	validation_0-rmse:0.33452
-[486]	validation_0-rmse:0.33448
-[487]	validation_0-rmse:0.33434
-[488]	validation_0-rmse:0.33425
-[489]	validation_0-rmse:0.33410
-[490]	validation_0-rmse:0.33394
-[491]	validation_0-rmse:0.33378
-[492]	validation_0-rmse:0.33367
-[493]	validation_0-rmse:0.33352
-[494]	validation_0-rmse:0.33342
-[495]	validation_0-rmse:0.33335
-[496]	validation_0-rmse:0.33321
-[497]	validation_0-rmse:0.33319
-[498]	validation_0-rmse:0.33293
-[499]	validation_0-rmse:0.33283
-[500]	validation_0-rmse:0.33286
-[501]	validation_0-rmse:0.33276
-[502]	validation_0-rmse:0.33263
-[503]	validation_0-rmse:0.33253
-[504]	validation_0-rmse:0.33243
-[505]	validation_0-rmse:0.33224
-[506]	validation_0-rmse:0.33209
-[507]	validation_0-rmse:0.33213
-[508]	validation_0-rmse:0.33206
-[509]	validation_0-rmse:0.33180
-[510]	validation_0-rmse:0.33174
-[511]	validation_0-rmse:0.33162
-[512]	validation_0-rmse:0.33144
-[513]	validation_0-rmse:0.33143
-[514]	validation_0-rmse:0.33139
-[515]	validation_0-rmse:0.33146
-[516]	validation_0-rmse:0.33143
-[517]	validation_0-rmse:0.33139
-[518]	validation_0-rmse:0.33139
-[519]	validation_0-rmse:0.33116
-[520]	validation_0-rmse:0.33118
-[521]	validation_0-rmse:0.33112
-[522]	validation_0-rmse:0.33092
-[523]	validation_0-rmse:0.33076
-[524]	validation_0-rmse:0.33069
-[525]	validation_0-rmse:0.33055
-[526]	validation_0-rmse:0.33052
-[527]	validation_0-rmse:0.33048
-[528]	validation_0-rmse:0.33035
-[529]	validation_0-rmse:0.33035
-[530]	validation_0-rmse:0.33042
-[531]	validation_0-rmse:0.33022
-[532]	validation_0-rmse:0.33002
-[533]	validation_0-rmse:0.32992
-[534]	validation_0-rmse:0.32978
-[535]	validation_0-rmse:0.32972
-[536]	validation_0-rmse:0.32979
-[537]	validation_0-rmse:0.32982
-[538]	validation_0-rmse:0.32982
-[539]	validation_0-rmse:0.32981
-[540]	validation_0-rmse:0.32981
-[541]	validation_0-rmse:0.32971
-[542]	validation_0-rmse:0.32966
-[543]	validation_0-rmse:0.32970
-[544]	validation_0-rmse:0.32967
-[545]	validation_0-rmse:0.32953
-[546]	validation_0-rmse:0.32952
-[547]	validation_0-rmse:0.32944
-[548]	validation_0-rmse:0.32924
-[549]	validation_0-rmse:0.32909
-[550]	validation_0-rmse:0.32888
-[551]	validation_0-rmse:0.32883
-[552]	validation_0-rmse:0.32870
-[553]	validation_0-rmse:0.32863
-[554]	validation_0-rmse:0.32850
-[555]	validation_0-rmse:0.32854
-[556]	validation_0-rmse:0.32846
-[557]	validation_0-rmse:0.32831
-[558]	validation_0-rmse:0.32831
-[559]	validation_0-rmse:0.32821
-[560]	validation_0-rmse:0.32819
-[561]	validation_0-rmse:0.32815
-[562]	validation_0-rmse:0.32826
-[563]	validation_0-rmse:0.32819
-[564]	validation_0-rmse:0.32811
-[565]	validation_0-rmse:0.32793
-[566]	validation_0-rmse:0.32781
-[567]	validation_0-rmse:0.32778
-[568]	validation_0-rmse:0.32761
-[569]	validation_0-rmse:0.32764
-[570]	validation_0-rmse:0.32762
-[571]	validation_0-rmse:0.32767
-[572]	validation_0-rmse:0.32752
-[573]	validation_0-rmse:0.32752
-[574]	validation_0-rmse:0.32749
-[575]	validation_0-rmse:0.32741
-[576]	validation_0-rmse:0.32738
-[577]	validation_0-rmse:0.32737
-[578]	validation_0-rmse:0.32721
-[579]	validation_0-rmse:0.32711
-[580]	validation_0-rmse:0.32702
-[581]	validation_0-rmse:0.32703
-[582]	validation_0-rmse:0.32716
-[583]	validation_0-rmse:0.32721
-[584]	validation_0-rmse:0.32714
-[585]	validation_0-rmse:0.32704
-[586]	validation_0-rmse:0.32708
-[587]	validation_0-rmse:0.32704
-[588]	validation_0-rmse:0.32705
-[589]	validation_0-rmse:0.32694
-[590]	validation_0-rmse:0.32692
-[591]	validation_0-rmse:0.32686
-[592]	validation_0-rmse:0.32692
-[593]	validation_0-rmse:0.32686
-[594]	validation_0-rmse:0.32677
-[595]	validation_0-rmse:0.32649
-[596]	validation_0-rmse:0.32654
-[597]	validation_0-rmse:0.32650
-[598]	validation_0-rmse:0.32649
-[599]	validation_0-rmse:0.32649
-[600]	validation_0-rmse:0.32635
-[601]	validation_0-rmse:0.32613
-[602]	validation_0-rmse:0.32612
-[603]	validation_0-rmse:0.32619
-[604]	validation_0-rmse:0.32611
-[605]	validation_0-rmse:0.32599
-[606]	validation_0-rmse:0.32602
-[607]	validation_0-rmse:0.32583
-[608]	validation_0-rmse:0.32579
-[609]	validation_0-rmse:0.32577
-[610]	validation_0-rmse:0.32571
-[611]	validation_0-rmse:0.32552
-[612]	validation_0-rmse:0.32537
-[613]	validation_0-rmse:0.32529
-[614]	validation_0-rmse:0.32535
-[615]	validation_0-rmse:0.32528
-[616]	validation_0-rmse:0.32529
-[617]	validation_0-rmse:0.32539
-[618]	validation_0-rmse:0.32532
-[619]	validation_0-rmse:0.32526
-[620]	validation_0-rmse:0.32521
-[621]	validation_0-rmse:0.32515
-[622]	validation_0-rmse:0.32501
-[623]	validation_0-rmse:0.32475
-[624]	validation_0-rmse:0.32477
-[625]	validation_0-rmse:0.32480
-[626]	validation_0-rmse:0.32477
-[627]	validation_0-rmse:0.32479
-[628]	validation_0-rmse:0.32475
-[629]	validation_0-rmse:0.32475
-[630]	validation_0-rmse:0.32470
-[631]	validation_0-rmse:0.32461
-[632]	validation_0-rmse:0.32453
-[633]	validation_0-rmse:0.32441
-[634]	validation_0-rmse:0.32434
-[635]	validation_0-rmse:0.32417
-[636]	validation_0-rmse:0.32416
-[637]	validation_0-rmse:0.32417
-[638]	validation_0-rmse:0.32390
-[639]	validation_0-rmse:0.32381
-[640]	validation_0-rmse:0.32349
-[641]	validation_0-rmse:0.32334
-[642]	validation_0-rmse:0.32335
-[643]	validation_0-rmse:0.32327
-[644]	validation_0-rmse:0.32313
-[645]	validation_0-rmse:0.32317
-[646]	validation_0-rmse:0.32310
-[647]	validation_0-rmse:0.32315
-[648]	validation_0-rmse:0.32318
-[649]	validation_0-rmse:0.32316
-[650]	validation_0-rmse:0.32316
-[651]	validation_0-rmse:0.32320
-[652]	validation_0-rmse:0.32318
-[653]	validation_0-rmse:0.32299
-[654]	validation_0-rmse:0.32291
-[655]	validation_0-rmse:0.32291
-[656]	validation_0-rmse:0.32286
-[657]	validation_0-rmse:0.32282
-[658]	validation_0-rmse:0.32272
-[659]	validation_0-rmse:0.32267
-[660]	validation_0-rmse:0.32253
-[661]	validation_0-rmse:0.32254
-[662]	validation_0-rmse:0.32252
-[663]	validation_0-rmse:0.32241
-[664]	validation_0-rmse:0.32244
-[665]	validation_0-rmse:0.32239
-[666]	validation_0-rmse:0.32235
-[667]	validation_0-rmse:0.32227
-[668]	validation_0-rmse:0.32215
-[669]	validation_0-rmse:0.32194
-[670]	validation_0-rmse:0.32186
-[671]	validation_0-rmse:0.32183
-[672]	validation_0-rmse:0.32182
-[673]	validation_0-rmse:0.32185
-[674]	validation_0-rmse:0.32188
-[675]	validation_0-rmse:0.32193
-[676]	validation_0-rmse:0.32189
-[677]	validation_0-rmse:0.32189
-[678]	validation_0-rmse:0.32196
-[679]	validation_0-rmse:0.32191
-[680]	validation_0-rmse:0.32187
-[681]	validation_0-rmse:0.32186
-[682]	validation_0-rmse:0.32177
-[683]	validation_0-rmse:0.32170
-[684]	validation_0-rmse:0.32178
-[685]	validation_0-rmse:0.32171
-[686]	validation_0-rmse:0.32156
-[687]	validation_0-rmse:0.32155
-[688]	validation_0-rmse:0.32161
-[689]	validation_0-rmse:0.32156
-[690]	validation_0-rmse:0.32135
-[691]	validation_0-rmse:0.32131
-[692]	validation_0-rmse:0.32125
-[693]	validation_0-rmse:0.32115
-[694]	validation_0-rmse:0.32099
-[695]	validation_0-rmse:0.32087
-[696]	validation_0-rmse:0.32099
-[697]	validation_0-rmse:0.32093
-[698]	validation_0-rmse:0.32102
-[699]	validation_0-rmse:0.32108
-[700]	validation_0-rmse:0.32099
-[701]	validation_0-rmse:0.32082
-[702]	validation_0-rmse:0.32055
-[703]	validation_0-rmse:0.32058
-[704]	validation_0-rmse:0.32045
-[705]	validation_0-rmse:0.32054
-[706]	validation_0-rmse:0.32060
-[707]	validation_0-rmse:0.32062
-[708]	validation_0-rmse:0.32061
-[709]	validation_0-rmse:0.32048
-[710]	validation_0-rmse:0.32039
-[711]	validation_0-rmse:0.32033
-[712]	validation_0-rmse:0.32020
-[713]	validation_0-rmse:0.32021
-[714]	validation_0-rmse:0.32012
-[715]	validation_0-rmse:0.32009
-[716]	validation_0-rmse:0.32013
-[717]	validation_0-rmse:0.32014
-[718]	validation_0-rmse:0.32021
-[719]	validation_0-rmse:0.32018
-[720]	validation_0-rmse:0.32010
-[721]	validation_0-rmse:0.32009
-[722]	validation_0-rmse:0.32018
-[723]	validation_0-rmse:0.32022
-[724]	validation_0-rmse:0.32019
-[725]	validation_0-rmse:0.32010
-[726]	validation_0-rmse:0.32008
-[727]	validation_0-rmse:0.32005
-[728]	validation_0-rmse:0.31985
-[729]	validation_0-rmse:0.31957
-[730]	validation_0-rmse:0.31956
-[731]	validation_0-rmse:0.31943
-[732]	validation_0-rmse:0.31938
-[733]	validation_0-rmse:0.31931
-[734]	validation_0-rmse:0.31936
-[735]	validation_0-rmse:0.31941
-[736]	validation_0-rmse:0.31936
-[737]	validation_0-rmse:0.31926
-[738]	validation_0-rmse:0.31923
-[739]	validation_0-rmse:0.31913
-[740]	validation_0-rmse:0.31910
-[741]	validation_0-rmse:0.31904
-[742]	validation_0-rmse:0.31902
-[743]	validation_0-rmse:0.31901
-[744]	validation_0-rmse:0.31895
-[745]	validation_0-rmse:0.31892
-[746]	validation_0-rmse:0.31889
-[747]	validation_0-rmse:0.31873
-[748]	validation_0-rmse:0.31844
-[749]	validation_0-rmse:0.31846
-[750]	validation_0-rmse:0.31840
-[751]	validation_0-rmse:0.31837
-[752]	validation_0-rmse:0.31831
-[753]	validation_0-rmse:0.31827
-[754]	validation_0-rmse:0.31828
-[755]	validation_0-rmse:0.31818
-[756]	validation_0-rmse:0.31814
-[757]	validation_0-rmse:0.31804
-[758]	validation_0-rmse:0.31807
-[759]	validation_0-rmse:0.31803
-[760]	validation_0-rmse:0.31791
-[761]	validation_0-rmse:0.31798
-[762]	validation_0-rmse:0.31800
-[763]	validation_0-rmse:0.31795
-[764]	validation_0-rmse:0.31788
-[765]	validation_0-rmse:0.31777
-[766]	validation_0-rmse:0.31766
-[767]	validation_0-rmse:0.31763
-[768]	validation_0-rmse:0.31756
-[769]	validation_0-rmse:0.31746
-[770]	validation_0-rmse:0.31752
-[771]	validation_0-rmse:0.31757
-[772]	validation_0-rmse:0.31759
-[773]	validation_0-rmse:0.31760
-[774]	validation_0-rmse:0.31754
-[775]	validation_0-rmse:0.31750
-[776]	validation_0-rmse:0.31751
-[777]	validation_0-rmse:0.31732
-[778]	validation_0-rmse:0.31732
-[779]	validation_0-rmse:0.31721
-[780]	validation_0-rmse:0.31711
-[781]	validation_0-rmse:0.31712
-[782]	validation_0-rmse:0.31704
-[783]	validation_0-rmse:0.31691
-[784]	validation_0-rmse:0.31691
-[785]	validation_0-rmse:0.31687
-[786]	validation_0-rmse:0.31680
-[787]	validation_0-rmse:0.31681
-[788]	validation_0-rmse:0.31667
-[789]	validation_0-rmse:0.31665
-[790]	validation_0-rmse:0.31664
-[791]	validation_0-rmse:0.31653
-[792]	validation_0-rmse:0.31638
-[793]	validation_0-rmse:0.31634
-[794]	validation_0-rmse:0.31611
-[795]	validation_0-rmse:0.31615
-[796]	validation_0-rmse:0.31618
-[797]	validation_0-rmse:0.31627
-[798]	validation_0-rmse:0.31618
-[799]	validation_0-rmse:0.31617
-[800]	validation_0-rmse:0.31620
-[801]	validation_0-rmse:0.31613
-[802]	validation_0-rmse:0.31611
-[803]	validation_0-rmse:0.31611
-[804]	validation_0-rmse:0.31614
-[805]	validation_0-rmse:0.31609
-[806]	validation_0-rmse:0.31597
-[807]	validation_0-rmse:0.31589
-[808]	validation_0-rmse:0.31566
-[809]	validation_0-rmse:0.31557
-[810]	validation_0-rmse:0.31559
-[811]	validation_0-rmse:0.31555
-[812]	validation_0-rmse:0.31559
-[813]	validation_0-rmse:0.31564
-[814]	validation_0-rmse:0.31558
-[815]	validation_0-rmse:0.31555
-[816]	validation_0-rmse:0.31536
-[817]	validation_0-rmse:0.31530
-[818]	validation_0-rmse:0.31527
-[819]	validation_0-rmse:0.31521
-[820]	validation_0-rmse:0.31513
-[821]	validation_0-rmse:0.31514
-[822]	validation_0-rmse:0.31510
-[823]	validation_0-rmse:0.31505
-[824]	validation_0-rmse:0.31494
-[825]	validation_0-rmse:0.31492
-[826]	validation_0-rmse:0.31495
-[827]	validation_0-rmse:0.31488
-[828]	validation_0-rmse:0.31486
-[829]	validation_0-rmse:0.31477
-[830]	validation_0-rmse:0.31478
-[831]	validation_0-rmse:0.31473
-[832]	validation_0-rmse:0.31468
-[833]	validation_0-rmse:0.31474
-[834]	validation_0-rmse:0.31470
-[835]	validation_0-rmse:0.31473
-[836]	validation_0-rmse:0.31463
-[837]	validation_0-rmse:0.31460
-[838]	validation_0-rmse:0.31451
-[839]	validation_0-rmse:0.31453
-[840]	validation_0-rmse:0.31447
-[841]	validation_0-rmse:0.31444
-[842]	validation_0-rmse:0.31421
-[843]	validation_0-rmse:0.31408
-[844]	validation_0-rmse:0.31392
-[845]	validation_0-rmse:0.31388
-[846]	validation_0-rmse:0.31392
-[847]	validation_0-rmse:0.31396
-[848]	validation_0-rmse:0.31385
-[849]	validation_0-rmse:0.31382
-[850]	validation_0-rmse:0.31379
-[851]	validation_0-rmse:0.31371
-[852]	validation_0-rmse:0.31363
-[853]	validation_0-rmse:0.31366
-[854]	validation_0-rmse:0.31369
-[855]	validation_0-rmse:0.31365
-[856]	validation_0-rmse:0.31358
-[857]	validation_0-rmse:0.31357
-[858]	validation_0-rmse:0.31358
-[859]	validation_0-rmse:0.31355
-[860]	validation_0-rmse:0.31356
-[861]	validation_0-rmse:0.31356
-[862]	validation_0-rmse:0.31367
-[863]	validation_0-rmse:0.31366
-[864]	validation_0-rmse:0.31363
-[865]	validation_0-rmse:0.31362
-[866]	validation_0-rmse:0.31367
-[867]	validation_0-rmse:0.31369
-[868]	validation_0-rmse:0.31365
-[869]	validation_0-rmse:0.31359
-[870]	validation_0-rmse:0.31356
-[871]	validation_0-rmse:0.31365
-[872]	validation_0-rmse:0.31356
-[873]	validation_0-rmse:0.31353
-[874]	validation_0-rmse:0.31343
-[875]	validation_0-rmse:0.31335
-[876]	validation_0-rmse:0.31330
-[877]	validation_0-rmse:0.31328
-[878]	validation_0-rmse:0.31325
-[879]	validation_0-rmse:0.31319
-[880]	validation_0-rmse:0.31314
-[881]	validation_0-rmse:0.31311
-[882]	validation_0-rmse:0.31312
-[883]	validation_0-rmse:0.31305
-[884]	validation_0-rmse:0.31305
-[885]	validation_0-rmse:0.31290
-[886]	validation_0-rmse:0.31281
-[887]	validation_0-rmse:0.31269
-[888]	validation_0-rmse:0.31269
-[889]	validation_0-rmse:0.31263
-[890]	validation_0-rmse:0.31261
-[891]	validation_0-rmse:0.31257
-[892]	validation_0-rmse:0.31257
-[893]	validation_0-rmse:0.31254
-[894]	validation_0-rmse:0.31249
-[895]	validation_0-rmse:0.31253
-[896]	validation_0-rmse:0.31250
-[897]	validation_0-rmse:0.31259
-[898]	validation_0-rmse:0.31252
-[899]	validation_0-rmse:0.31254
-[900]	validation_0-rmse:0.31246
-[901]	validation_0-rmse:0.31251
-[902]	validation_0-rmse:0.31244
-[903]	validation_0-rmse:0.31233
-[904]	validation_0-rmse:0.31243
-[905]	validation_0-rmse:0.31248
-[906]	validation_0-rmse:0.31252
-[907]	validation_0-rmse:0.31246
-[908]	validation_0-rmse:0.31257
-[909]	validation_0-rmse:0.31260
-[910]	validation_0-rmse:0.31258
-[911]	validation_0-rmse:0.31258
-[912]	validation_0-rmse:0.31248
-[913]	validation_0-rmse:0.31253
-[914]	validation_0-rmse:0.31258
-[915]	validation_0-rmse:0.31250
-[916]	validation_0-rmse:0.31249
-[917]	validation_0-rmse:0.31245
-[918]	validation_0-rmse:0.31248
-[919]	validation_0-rmse:0.31240
-[920]	validation_0-rmse:0.31246
-[921]	validation_0-rmse:0.31234
-[922]	validation_0-rmse:0.31222
-[923]	validation_0-rmse:0.31221
-[924]	validation_0-rmse:0.31211
-[925]	validation_0-rmse:0.31208
-[926]	validation_0-rmse:0.31209
-[927]	validation_0-rmse:0.31210
-[928]	validation_0-rmse:0.31196
-[929]	validation_0-rmse:0.31193
-[930]	validation_0-rmse:0.31189
-[931]	validation_0-rmse:0.31185
-[932]	validation_0-rmse:0.31184
-[933]	validation_0-rmse:0.31182
-[934]	validation_0-rmse:0.31175
-[935]	validation_0-rmse:0.31175
-[936]	validation_0-rmse:0.31166
-[937]	validation_0-rmse:0.31159
-[938]	validation_0-rmse:0.31152
-[939]	validation_0-rmse:0.31164
-[940]	validation_0-rmse:0.31164
-[941]	validation_0-rmse:0.31160
-[942]	validation_0-rmse:0.31157
-[943]	validation_0-rmse:0.31153
-[944]	validation_0-rmse:0.31153
-[945]	validation_0-rmse:0.31152
-[946]	validation_0-rmse:0.31153
-[947]	validation_0-rmse:0.31150
-[948]	validation_0-rmse:0.31146
-[949]	validation_0-rmse:0.31149
-[950]	validation_0-rmse:0.31148
-[951]	validation_0-rmse:0.31149
-[952]	validation_0-rmse:0.31148
-[953]	validation_0-rmse:0.31143
-[954]	validation_0-rmse:0.31144
-[955]	validation_0-rmse:0.31134
-[956]	validation_0-rmse:0.31128
-[957]	validation_0-rmse:0.31134
-[958]	validation_0-rmse:0.31129
-[959]	validation_0-rmse:0.31116
-[960]	validation_0-rmse:0.31113
-[961]	validation_0-rmse:0.31114
-[962]	validation_0-rmse:0.31113
-[963]	validation_0-rmse:0.31109
-[964]	validation_0-rmse:0.31108
-[965]	validation_0-rmse:0.31099
-[966]	validation_0-rmse:0.31098
-[967]	validation_0-rmse:0.31096
-[968]	validation_0-rmse:0.31080
-[969]	validation_0-rmse:0.31075
-[970]	validation_0-rmse:0.31082
-[971]	validation_0-rmse:0.31073
-[972]	validation_0-rmse:0.31068
-[973]	validation_0-rmse:0.31058
-[974]	validation_0-rmse:0.31066
-[975]	validation_0-rmse:0.31072
-[976]	validation_0-rmse:0.31067
-[977]	validation_0-rmse:0.31069
-[978]	validation_0-rmse:0.31067
-[979]	validation_0-rmse:0.31068
-[980]	validation_0-rmse:0.31072
-[981]	validation_0-rmse:0.31077
-[982]	validation_0-rmse:0.31090
-[983]	validation_0-rmse:0.31085
-[984]	validation_0-rmse:0.31089
-[985]	validation_0-rmse:0.31078
-[986]	validation_0-rmse:0.31081
-[987]	validation_0-rmse:0.31078
-[988]	validation_0-rmse:0.31072
-[989]	validation_0-rmse:0.31069
-[990]	validation_0-rmse:0.31062
-[991]	validation_0-rmse:0.31060
-[992]	validation_0-rmse:0.31054
-[993]	validation_0-rmse:0.31050
-[994]	validation_0-rmse:0.31054
-[995]	validation_0-rmse:0.31058
-[996]	validation_0-rmse:0.31062
-[997]	validation_0-rmse:0.31059
-[998]	validation_0-rmse:0.31061
-[999]	validation_0-rmse:0.31055
-[1000]	validation_0-rmse:0.31048
-[1001]	validation_0-rmse:0.31054
-[1002]	validation_0-rmse:0.31043
-[1003]	validation_0-rmse:0.31039
-[1004]	validation_0-rmse:0.31034
-[1005]	validation_0-rmse:0.31031
-[1006]	validation_0-rmse:0.31028
-[1007]	validation_0-rmse:0.31023
-[1008]	validation_0-rmse:0.31021
-[1009]	validation_0-rmse:0.31016
-[1010]	validation_0-rmse:0.31008
-[1011]	validation_0-rmse:0.31011
-[1012]	validation_0-rmse:0.31013
-[1013]	validation_0-rmse:0.31011
-[1014]	validation_0-rmse:0.31003
-[1015]	validation_0-rmse:0.31009
-[1016]	validation_0-rmse:0.31016
-[1017]	validation_0-rmse:0.31015
-[1018]	validation_0-rmse:0.31013
-[1019]	validation_0-rmse:0.31011
-[1020]	validation_0-rmse:0.31013
-[1021]	validation_0-rmse:0.31013
-[1022]	validation_0-rmse:0.31014
-[1023]	validation_0-rmse:0.31011
-[1024]	validation_0-rmse:0.31010
-[1025]	validation_0-rmse:0.31010
-[1026]	validation_0-rmse:0.31004
-[1027]	validation_0-rmse:0.31011
-[1028]	validation_0-rmse:0.31008
-[1029]	validation_0-rmse:0.31005
-[1030]	validation_0-rmse:0.31009
-[1031]	validation_0-rmse:0.31006
-[1032]	validation_0-rmse:0.30997
-[1033]	validation_0-rmse:0.30987
-[1034]	validation_0-rmse:0.30985
-[1035]	validation_0-rmse:0.30984
-[1036]	validation_0-rmse:0.30970
-[1037]	validation_0-rmse:0.30960
-[1038]	validation_0-rmse:0.30971
-[1039]	validation_0-rmse:0.30971
-[1040]	validation_0-rmse:0.30975
-[1041]	validation_0-rmse:0.30967
-[1042]	validation_0-rmse:0.30965
-[1043]	validation_0-rmse:0.30962
-[1044]	validation_0-rmse:0.30964
-[1045]	validation_0-rmse:0.30964
-[1046]	validation_0-rmse:0.30959
-[1047]	validation_0-rmse:0.30960
-[1048]	validation_0-rmse:0.30966
-[1049]	validation_0-rmse:0.30963
-[1050]	validation_0-rmse:0.30960
-[1051]	validation_0-rmse:0.30962
-[1052]	validation_0-rmse:0.30961
-[1053]	validation_0-rmse:0.30958
-[1054]	validation_0-rmse:0.30951
-[1055]	validation_0-rmse:0.30954
-[1056]	validation_0-rmse:0.30948
-[1057]	validation_0-rmse:0.30943
-[1058]	validation_0-rmse:0.30939
-[1059]	validation_0-rmse:0.30942
-[1060]	validation_0-rmse:0.30951
-[1061]	validation_0-rmse:0.30951
-[1062]	validation_0-rmse:0.30954
-[1063]	validation_0-rmse:0.30953
-[1064]	validation_0-rmse:0.30947
-[1065]	validation_0-rmse:0.30946
-[1066]	validation_0-rmse:0.30943
-[1067]	validation_0-rmse:0.30946
-[1068]	validation_0-rmse:0.30946
-[1069]	validation_0-rmse:0.30939
-[1070]	validation_0-rmse:0.30933
-[1071]	validation_0-rmse:0.30935
-[1072]	validation_0-rmse:0.30935
-[1073]	validation_0-rmse:0.30928
-[1074]	validation_0-rmse:0.30922
-[1075]	validation_0-rmse:0.30928
-[1076]	validation_0-rmse:0.30929
-[1077]	validation_0-rmse:0.30925
-[1078]	validation_0-rmse:0.30920
-[1079]	validation_0-rmse:0.30917
-[1080]	validation_0-rmse:0.30919
-[1081]	validation_0-rmse:0.30920
-[1082]	validation_0-rmse:0.30918
-[1083]	validation_0-rmse:0.30919
-[1084]	validation_0-rmse:0.30912
-[1085]	validation_0-rmse:0.30912
-[1086]	validation_0-rmse:0.30902
-[1087]	validation_0-rmse:0.30893
-[1088]	validation_0-rmse:0.30894
-[1089]	validation_0-rmse:0.30888
-[1090]	validation_0-rmse:0.30891
-[1091]	validation_0-rmse:0.30889
-[1092]	validation_0-rmse:0.30890
-[1093]	validation_0-rmse:0.30895
-[1094]	validation_0-rmse:0.30895
-[1095]	validation_0-rmse:0.30888
-[1096]	validation_0-rmse:0.30881
-[1097]	validation_0-rmse:0.30893
-[1098]	validation_0-rmse:0.30891
-[1099]	validation_0-rmse:0.30887
-[1100]	validation_0-rmse:0.30888
-[1101]	validation_0-rmse:0.30891
-[1102]	validation_0-rmse:0.30885
-[1103]	validation_0-rmse:0.30885
-[1104]	validation_0-rmse:0.30870
-[1105]	validation_0-rmse:0.30868
-[1106]	validation_0-rmse:0.30873
-[1107]	validation_0-rmse:0.30864
-[1108]	validation_0-rmse:0.30866
-[1109]	validation_0-rmse:0.30855
-[1110]	validation_0-rmse:0.30855
-[1111]	validation_0-rmse:0.30841
-[1112]	validation_0-rmse:0.30842
-[1113]	validation_0-rmse:0.30845
-[1114]	validation_0-rmse:0.30845
-[1115]	validation_0-rmse:0.30833
-[1116]	validation_0-rmse:0.30833
-[1117]	validation_0-rmse:0.30830
-[1118]	validation_0-rmse:0.30829
-[1119]	validation_0-rmse:0.30828
-[1120]	validation_0-rmse:0.30822
-[1121]	validation_0-rmse:0.30822
-[1122]	validation_0-rmse:0.30825
-[1123]	validation_0-rmse:0.30824
-[1124]	validation_0-rmse:0.30822
-[1125]	validation_0-rmse:0.30829
-[1126]	validation_0-rmse:0.30821
-[1127]	validation_0-rmse:0.30821
-[1128]	validation_0-rmse:0.30817
-[1129]	validation_0-rmse:0.30822
-[1130]	validation_0-rmse:0.30819
-[1131]	validation_0-rmse:0.30816
-[1132]	validation_0-rmse:0.30821
-[1133]	validation_0-rmse:0.30820
-[1134]	validation_0-rmse:0.30828
-[1135]	validation_0-rmse:0.30825
-[1136]	validation_0-rmse:0.30818
-[1137]	validation_0-rmse:0.30816
-[1138]	validation_0-rmse:0.30812
-[1139]	validation_0-rmse:0.30814
-[1140]	validation_0-rmse:0.30810
-[1141]	validation_0-rmse:0.30805
-[1142]	validation_0-rmse:0.30801
-[1143]	validation_0-rmse:0.30798
-[1144]	validation_0-rmse:0.30795
-[1145]	validation_0-rmse:0.30801
-[1146]	validation_0-rmse:0.30794
-[1147]	validation_0-rmse:0.30792
-[1148]	validation_0-rmse:0.30786
-[1149]	validation_0-rmse:0.30785
-[1150]	validation_0-rmse:0.30787
-[1151]	validation_0-rmse:0.30789
-[1152]	validation_0-rmse:0.30787
-[1153]	validation_0-rmse:0.30784
-[1154]	validation_0-rmse:0.30775
-[1155]	validation_0-rmse:0.30778
-[1156]	validation_0-rmse:0.30772
-[1157]	validation_0-rmse:0.30774
-[1158]	validation_0-rmse:0.30775
-[1159]	validation_0-rmse:0.30770
-[1160]	validation_0-rmse:0.30774
-[1161]	validation_0-rmse:0.30776
-[1162]	validation_0-rmse:0.30774
-[1163]	validation_0-rmse:0.30781
-[1164]	validation_0-rmse:0.30778
-[1165]	validation_0-rmse:0.30775
-[1166]	validation_0-rmse:0.30774
-[1167]	validation_0-rmse:0.30767
-[1168]	validation_0-rmse:0.30771
-[1169]	validation_0-rmse:0.30769
-[1170]	validation_0-rmse:0.30763
-[1171]	validation_0-rmse:0.30765
-[1172]	validation_0-rmse:0.30769
-[1173]	validation_0-rmse:0.30771
-[1174]	validation_0-rmse:0.30778
-[1175]	validation_0-rmse:0.30770
-[1176]	validation_0-rmse:0.30763
-[1177]	validation_0-rmse:0.30756
-[1178]	validation_0-rmse:0.30748
-[1179]	validation_0-rmse:0.30751
-[1180]	validation_0-rmse:0.30746
-[1181]	validation_0-rmse:0.30743
-[1182]	validation_0-rmse:0.30740
-[1183]	validation_0-rmse:0.30743
-[1184]	validation_0-rmse:0.30741
-[1185]	validation_0-rmse:0.30738
-[1186]	validation_0-rmse:0.30738
-[1187]	validation_0-rmse:0.30736
-[1188]	validation_0-rmse:0.30734
-[1189]	validation_0-rmse:0.30734
-[1190]	validation_0-rmse:0.30737
-[1191]	validation_0-rmse:0.30736
-[1192]	validation_0-rmse:0.30732
-[1193]	validation_0-rmse:0.30736
-[1194]	validation_0-rmse:0.30738
-[1195]	validation_0-rmse:0.30733
-[1196]	validation_0-rmse:0.30732
-[1197]	validation_0-rmse:0.30730
-[1198]	validation_0-rmse:0.30741
-[1199]	validation_0-rmse:0.30741
-[1200]	validation_0-rmse:0.30743
-[1201]	validation_0-rmse:0.30741
-[1202]	validation_0-rmse:0.30741
-[1203]	validation_0-rmse:0.30738
-[1204]	validation_0-rmse:0.30745
-[1205]	validation_0-rmse:0.30742
-[1206]	validation_0-rmse:0.30738
-[1207]	validation_0-rmse:0.30734
-[1208]	validation_0-rmse:0.30730
-[1209]	validation_0-rmse:0.30730
-[1210]	validation_0-rmse:0.30732
-[1211]	validation_0-rmse:0.30732
-[1212]	validation_0-rmse:0.30733
-[1213]	validation_0-rmse:0.30743
-[1214]	validation_0-rmse:0.30749
-[1215]	validation_0-rmse:0.30747
-[1216]	validation_0-rmse:0.30748
-[1217]	validation_0-rmse:0.30743
-[1218]	validation_0-rmse:0.30735
-[1219]	validation_0-rmse:0.30729
-[1220]	validation_0-rmse:0.30723
-[1221]	validation_0-rmse:0.30723
-[1222]	validation_0-rmse:0.30720
-[1223]	validation_0-rmse:0.30725
-[1224]	validation_0-rmse:0.30719
-[1225]	validation_0-rmse:0.30720
-[1226]	validation_0-rmse:0.30720
-[1227]	validation_0-rmse:0.30719
-[1228]	validation_0-rmse:0.30717
-[1229]	validation_0-rmse:0.30718
-[1230]	validation_0-rmse:0.30723
-[1231]	validation_0-rmse:0.30715
-[1232]	validation_0-rmse:0.30730
-[1233]	validation_0-rmse:0.30726
-[1234]	validation_0-rmse:0.30727
-[1235]	validation_0-rmse:0.30728
-[1236]	validation_0-rmse:0.30722
-[1237]	validation_0-rmse:0.30721
-[1238]	validation_0-rmse:0.30729
-[1239]	validation_0-rmse:0.30732
-[1240]	validation_0-rmse:0.30724
-[1241]	validation_0-rmse:0.30723
-[1242]	validation_0-rmse:0.30719
-[1243]	validation_0-rmse:0.30719
-[1244]	validation_0-rmse:0.30725
-[1245]	validation_0-rmse:0.30717
-[1246]	validation_0-rmse:0.30714
-[1247]	validation_0-rmse:0.30716
-[1248]	validation_0-rmse:0.30707
-[1249]	validation_0-rmse:0.30707
-[1250]	validation_0-rmse:0.30710
-[1251]	validation_0-rmse:0.30706
-[1252]	validation_0-rmse:0.30707
-[1253]	validation_0-rmse:0.30709
-[1254]	validation_0-rmse:0.30714
-[1255]	validation_0-rmse:0.30713
-[1256]	validation_0-rmse:0.30718
-[1257]	validation_0-rmse:0.30710
-[1258]	validation_0-rmse:0.30702
-[1259]	validation_0-rmse:0.30707
-[1260]	validation_0-rmse:0.30710
-[1261]	validation_0-rmse:0.30708
-[1262]	validation_0-rmse:0.30704
-[1263]	validation_0-rmse:0.30700
-[1264]	validation_0-rmse:0.30699
-[1265]	validation_0-rmse:0.30702
-[1266]	validation_0-rmse:0.30699
-[1267]	validation_0-rmse:0.30695
-[1268]	validation_0-rmse:0.30695
-[1269]	validation_0-rmse:0.30694
-[1270]	validation_0-rmse:0.30686
-[1271]	validation_0-rmse:0.30681
-[1272]	validation_0-rmse:0.30691
-[1273]	validation_0-rmse:0.30688
-[1274]	validation_0-rmse:0.30685
-[1275]	validation_0-rmse:0.30698
-[1276]	validation_0-rmse:0.30694
-[1277]	validation_0-rmse:0.30692
-[1278]	validation_0-rmse:0.30698
-[1279]	validation_0-rmse:0.30697
-[1280]	validation_0-rmse:0.30707
-[1281]	validation_0-rmse:0.30705
-[1282]	validation_0-rmse:0.30706
-[1283]	validation_0-rmse:0.30705
-[1284]	validation_0-rmse:0.30702
-[1285]	validation_0-rmse:0.30705
-[1286]	validation_0-rmse:0.30705
-[1287]	validation_0-rmse:0.30703
-[1288]	validation_0-rmse:0.30696
-[1289]	validation_0-rmse:0.30697
-[1290]	validation_0-rmse:0.30694
-[1291]	validation_0-rmse:0.30690
-[1292]	validation_0-rmse:0.30691
-[1293]	validation_0-rmse:0.30696
-[1294]	validation_0-rmse:0.30702
-[1295]	validation_0-rmse:0.30695
-[1296]	validation_0-rmse:0.30699
-[1297]	validation_0-rmse:0.30701
-[1298]	validation_0-rmse:0.30703
-[1299]	validation_0-rmse:0.30690
-[1300]	validation_0-rmse:0.30681
-[1301]	validation_0-rmse:0.30680
-[1302]	validation_0-rmse:0.30690
-[1303]	validation_0-rmse:0.30688
-[1304]	validation_0-rmse:0.30693
-[1305]	validation_0-rmse:0.30690
-[1306]	validation_0-rmse:0.30698
-[1307]	validation_0-rmse:0.30704
-[1308]	validation_0-rmse:0.30701
-[1309]	validation_0-rmse:0.30702
-[1310]	validation_0-rmse:0.30701
-[1311]	validation_0-rmse:0.30702
-[1312]	validation_0-rmse:0.30699
-[1313]	validation_0-rmse:0.30702
-[1314]	validation_0-rmse:0.30686
-[1315]	validation_0-rmse:0.30688
-[1316]	validation_0-rmse:0.30695
-[1317]	validation_0-rmse:0.30698
-[1318]	validation_0-rmse:0.30691
-[1319]	validation_0-rmse:0.30687
-[1320]	validation_0-rmse:0.30684
-[1321]	validation_0-rmse:0.30681
-[1322]	validation_0-rmse:0.30683
-[1323]	validation_0-rmse:0.30703
-[1324]	validation_0-rmse:0.30703
-[1325]	validation_0-rmse:0.30708
-[1326]	validation_0-rmse:0.30712
-[1327]	validation_0-rmse:0.30706
-[1328]	validation_0-rmse:0.30703
-[1329]	validation_0-rmse:0.30701
-[1330]	validation_0-rmse:0.30699
-[1331]	validation_0-rmse:0.30699
-[1332]	validation_0-rmse:0.30687
-[1333]	validation_0-rmse:0.30683
-[1334]	validation_0-rmse:0.30684
-[1335]	validation_0-rmse:0.30676
-[1336]	validation_0-rmse:0.30673
-[1337]	validation_0-rmse:0.30667
-[1338]	validation_0-rmse:0.30668
-[1339]	validation_0-rmse:0.30665
-[1340]	validation_0-rmse:0.30669
-[1341]	validation_0-rmse:0.30661
-[1342]	validation_0-rmse:0.30649
-[1343]	validation_0-rmse:0.30644
-[1344]	validation_0-rmse:0.30638
-[1345]	validation_0-rmse:0.30642
-[1346]	validation_0-rmse:0.30634
-[1347]	validation_0-rmse:0.30630
-[1348]	validation_0-rmse:0.30622
-[1349]	validation_0-rmse:0.30618
-[1350]	validation_0-rmse:0.30613
-[1351]	validation_0-rmse:0.30609
-[1352]	validation_0-rmse:0.30612
-[1353]	validation_0-rmse:0.30616
-[1354]	validation_0-rmse:0.30611
-[1355]	validation_0-rmse:0.30609
-[1356]	validation_0-rmse:0.30605
-[1357]	validation_0-rmse:0.30601
-[1358]	validation_0-rmse:0.30606
-[1359]	validation_0-rmse:0.30603
-[1360]	validation_0-rmse:0.30602
-[1361]	validation_0-rmse:0.30596
-[1362]	validation_0-rmse:0.30603
-[1363]	validation_0-rmse:0.30599
-[1364]	validation_0-rmse:0.30594
-[1365]	validation_0-rmse:0.30597
-[1366]	validation_0-rmse:0.30594
-[1367]	validation_0-rmse:0.30591
-[1368]	validation_0-rmse:0.30593
-[1369]	validation_0-rmse:0.30590
-[1370]	validation_0-rmse:0.30593
-[1371]	validation_0-rmse:0.30590
-[1372]	validation_0-rmse:0.30589
-[1373]	validation_0-rmse:0.30586
-[1374]	validation_0-rmse:0.30587
-[1375]	validation_0-rmse:0.30585
-[1376]	validation_0-rmse:0.30592
-[1377]	validation_0-rmse:0.30592
-[1378]	validation_0-rmse:0.30590
-[1379]	validation_0-rmse:0.30589
-[1380]	validation_0-rmse:0.30588
-[1381]	validation_0-rmse:0.30593
-[1382]	validation_0-rmse:0.30598
-[1383]	validation_0-rmse:0.30593
-[1384]	validation_0-rmse:0.30585
-[1385]	validation_0-rmse:0.30586
-[1386]	validation_0-rmse:0.30589
-[1387]	validation_0-rmse:0.30588
-[1388]	validation_0-rmse:0.30591
-[1389]	validation_0-rmse:0.30597
-[1390]	validation_0-rmse:0.30598
-[1391]	validation_0-rmse:0.30599
-[1392]	validation_0-rmse:0.30598
-[1393]	validation_0-rmse:0.30603
-[1394]	validation_0-rmse:0.30603
-[1395]	validation_0-rmse:0.30605
-[1396]	validation_0-rmse:0.30606
-[1397]	validation_0-rmse:0.30607
-[1398]	validation_0-rmse:0.30605
-[1399]	validation_0-rmse:0.30614
-[1400]	validation_0-rmse:0.30613
-[1401]	validation_0-rmse:0.30615
-[1402]	validation_0-rmse:0.30609
-[1403]	validation_0-rmse:0.30614
-[1404]	validation_0-rmse:0.30615
-[1405]	validation_0-rmse:0.30613
-[1406]	validation_0-rmse:0.30609
-[1407]	validation_0-rmse:0.30609
-[1408]	validation_0-rmse:0.30601
-[1409]	validation_0-rmse:0.30601
-[1410]	validation_0-rmse:0.30597
-[1411]	validation_0-rmse:0.30601
-[1412]	validation_0-rmse:0.30599
-[1413]	validation_0-rmse:0.30597
-[1414]	validation_0-rmse:0.30599
-[1415]	validation_0-rmse:0.30597
-[1416]	validation_0-rmse:0.30587
-[1417]	validation_0-rmse:0.30589
-[1418]	validation_0-rmse:0.30587
-[1419]	validation_0-rmse:0.30590
-[1420]	validation_0-rmse:0.30581
-[1421]	validation_0-rmse:0.30578
-[1422]	validation_0-rmse:0.30570
-[1423]	validation_0-rmse:0.30564
-[1424]	validation_0-rmse:0.30557
-[1425]	validation_0-rmse:0.30555
-[1426]	validation_0-rmse:0.30561
-[1427]	validation_0-rmse:0.30558
-[1428]	validation_0-rmse:0.30561
-[1429]	validation_0-rmse:0.30566
-[1430]	validation_0-rmse:0.30568
-[1431]	validation_0-rmse:0.30564
-[1432]	validation_0-rmse:0.30555
-[1433]	validation_0-rmse:0.30559
-[1434]	validation_0-rmse:0.30556
-[1435]	validation_0-rmse:0.30554
-[1436]	validation_0-rmse:0.30553
-[1437]	validation_0-rmse:0.30551
-[1438]	validation_0-rmse:0.30547
-[1439]	validation_0-rmse:0.30546
-[1440]	validation_0-rmse:0.30545
-[1441]	validation_0-rmse:0.30544
-[1442]	validation_0-rmse:0.30542
-[1443]	validation_0-rmse:0.30541
-[1444]	validation_0-rmse:0.30536
-[1445]	validation_0-rmse:0.30528
-[1446]	validation_0-rmse:0.30533
-[1447]	validation_0-rmse:0.30535
-[1448]	validation_0-rmse:0.30541
-[1449]	validation_0-rmse:0.30541
-[1450]	validation_0-rmse:0.30540
-[1451]	validation_0-rmse:0.30536
-[1452]	validation_0-rmse:0.30542
-[1453]	validation_0-rmse:0.30539
-[1454]	validation_0-rmse:0.30534
-[1455]	validation_0-rmse:0.30534
-[1456]	validation_0-rmse:0.30524
-[1457]	validation_0-rmse:0.30522
-[1458]	validation_0-rmse:0.30523
-[1459]	validation_0-rmse:0.30526
-[1460]	validation_0-rmse:0.30517
-[1461]	validation_0-rmse:0.30518
-[1462]	validation_0-rmse:0.30513
-[1463]	validation_0-rmse:0.30512
-[1464]	validation_0-rmse:0.30508
-[1465]	validation_0-rmse:0.30509
-[1466]	validation_0-rmse:0.30511
-[1467]	validation_0-rmse:0.30507
-[1468]	validation_0-rmse:0.30502
-[1469]	validation_0-rmse:0.30504
-[1470]	validation_0-rmse:0.30501
-[1471]	validation_0-rmse:0.30494
-[1472]	validation_0-rmse:0.30491
-[1473]	validation_0-rmse:0.30490
-[1474]	validation_0-rmse:0.30487
-[1475]	validation_0-rmse:0.30486
-[1476]	validation_0-rmse:0.30480
-[1477]	validation_0-rmse:0.30478
-[1478]	validation_0-rmse:0.30477
-[1479]	validation_0-rmse:0.30480
-[1480]	validation_0-rmse:0.30478
-[1481]	validation_0-rmse:0.30478
-[1482]	validation_0-rmse:0.30475
-[1483]	validation_0-rmse:0.30475
-[1484]	validation_0-rmse:0.30474
-[1485]	validation_0-rmse:0.30473
-[1486]	validation_0-rmse:0.30473
-[1487]	validation_0-rmse:0.30469
-[1488]	validation_0-rmse:0.30467
-[1489]	validation_0-rmse:0.30479
-[1490]	validation_0-rmse:0.30476
-[1491]	validation_0-rmse:0.30477
-[1492]	validation_0-rmse:0.30477
-[1493]	validation_0-rmse:0.30482
-[1494]	validation_0-rmse:0.30478
-[1495]	validation_0-rmse:0.30479
-[1496]	validation_0-rmse:0.30477
-[1497]	validation_0-rmse:0.30483
-[1498]	validation_0-rmse:0.30477
-[1499]	validation_0-rmse:0.30483
-[1500]	validation_0-rmse:0.30479
-[1501]	validation_0-rmse:0.30479
-[1502]	validation_0-rmse:0.30478
-[1503]	validation_0-rmse:0.30484
-[1504]	validation_0-rmse:0.30482
-[1505]	validation_0-rmse:0.30480
-[1506]	validation_0-rmse:0.30477
-[1507]	validation_0-rmse:0.30479
-[1508]	validation_0-rmse:0.30489
-[1509]	validation_0-rmse:0.30495
-[1510]	validation_0-rmse:0.30495
-[1511]	validation_0-rmse:0.30486
-[1512]	validation_0-rmse:0.30487
-[1513]	validation_0-rmse:0.30494
-[1514]	validation_0-rmse:0.30492
-[1515]	validation_0-rmse:0.30500
-[1516]	validation_0-rmse:0.30495
-[1517]	validation_0-rmse:0.30496
-[1518]	validation_0-rmse:0.30496
-[1519]	validation_0-rmse:0.30495
-[1520]	validation_0-rmse:0.30492
-[1521]	validation_0-rmse:0.30491
-[1522]	validation_0-rmse:0.30489
-[1523]	validation_0-rmse:0.30490
-[1524]	validation_0-rmse:0.30489
-[1525]	validation_0-rmse:0.30496
-[1526]	validation_0-rmse:0.30499
-[1527]	validation_0-rmse:0.30491
-[1528]	validation_0-rmse:0.30483
-[1529]	validation_0-rmse:0.30481
-[1530]	validation_0-rmse:0.30481
-[1531]	validation_0-rmse:0.30482
-[1532]	validation_0-rmse:0.30478
-[1533]	validation_0-rmse:0.30477
-[1534]	validation_0-rmse:0.30478
-[1535]	validation_0-rmse:0.30474
-[1536]	validation_0-rmse:0.30471
-[1537]	validation_0-rmse:0.30467
-[1538]	validation_0-rmse:0.30467
-[1539]	validation_0-rmse:0.30467
-[1540]	validation_0-rmse:0.30463
-[1541]	validation_0-rmse:0.30461
-[1542]	validation_0-rmse:0.30451
-[1543]	validation_0-rmse:0.30454
-[1544]	validation_0-rmse:0.30454
-[1545]	validation_0-rmse:0.30452
-[1546]	validation_0-rmse:0.30455
-[1547]	validation_0-rmse:0.30453
-[1548]	validation_0-rmse:0.30460
-[1549]	validation_0-rmse:0.30460
-[1550]	validation_0-rmse:0.30460
-[1551]	validation_0-rmse:0.30458
-[1552]	validation_0-rmse:0.30457
-[1553]	validation_0-rmse:0.30454
-[1554]	validation_0-rmse:0.30454
-[1555]	validation_0-rmse:0.30450
-[1556]	validation_0-rmse:0.30455
-[1557]	validation_0-rmse:0.30456
-[1558]	validation_0-rmse:0.30451
-[1559]	validation_0-rmse:0.30449
-[1560]	validation_0-rmse:0.30450
-[1561]	validation_0-rmse:0.30445
-[1562]	validation_0-rmse:0.30447
-[1563]	validation_0-rmse:0.30444
-[1564]	validation_0-rmse:0.30444
-[1565]	validation_0-rmse:0.30445
-[1566]	validation_0-rmse:0.30447
-[1567]	validation_0-rmse:0.30451
-[1568]	validation_0-rmse:0.30452
-[1569]	validation_0-rmse:0.30448
-[1570]	validation_0-rmse:0.30446
-[1571]	validation_0-rmse:0.30445
-[1572]	validation_0-rmse:0.30442
-[1573]	validation_0-rmse:0.30447
-[1574]	validation_0-rmse:0.30448
-[1575]	validation_0-rmse:0.30449
-[1576]	validation_0-rmse:0.30441
-[1577]	validation_0-rmse:0.30439
-[1578]	validation_0-rmse:0.30434
-[1579]	validation_0-rmse:0.30432
-[1580]	validation_0-rmse:0.30435
-[1581]	validation_0-rmse:0.30441
-[1582]	validation_0-rmse:0.30452
-[1583]	validation_0-rmse:0.30452
-[1584]	validation_0-rmse:0.30450
-[1585]	validation_0-rmse:0.30452
-[1586]	validation_0-rmse:0.30455
-[1587]	validation_0-rmse:0.30454
-[1588]	validation_0-rmse:0.30448
-[1589]	validation_0-rmse:0.30445
-[1590]	validation_0-rmse:0.30447
-[1591]	validation_0-rmse:0.30447
-[1592]	validation_0-rmse:0.30444
-[1593]	validation_0-rmse:0.30444
-[1594]	validation_0-rmse:0.30446
-[1595]	validation_0-rmse:0.30447
-[1596]	validation_0-rmse:0.30445
-[1597]	validation_0-rmse:0.30437
-[1598]	validation_0-rmse:0.30436
-[1599]	validation_0-rmse:0.30431
-[1600]	validation_0-rmse:0.30431
-[1601]	validation_0-rmse:0.30426
-[1602]	validation_0-rmse:0.30429
-[1603]	validation_0-rmse:0.30426
-[1604]	validation_0-rmse:0.30429
-[1605]	validation_0-rmse:0.30431
-[1606]	validation_0-rmse:0.30430
-[1607]	validation_0-rmse:0.30429
-[1608]	validation_0-rmse:0.30428
-[1609]	validation_0-rmse:0.30425
-[1610]	validation_0-rmse:0.30422
-[1611]	validation_0-rmse:0.30418
-[1612]	validation_0-rmse:0.30416
-[1613]	validation_0-rmse:0.30414
-[1614]	validation_0-rmse:0.30421
-[1615]	validation_0-rmse:0.30424
-[1616]	validation_0-rmse:0.30425
-[1617]	validation_0-rmse:0.30424
-[1618]	validation_0-rmse:0.30430
-[1619]	validation_0-rmse:0.30425
-[1620]	validation_0-rmse:0.30423
-[1621]	validation_0-rmse:0.30427
-[1622]	validation_0-rmse:0.30422
-[1623]	validation_0-rmse:0.30422
-[1624]	validation_0-rmse:0.30424
-[1625]	validation_0-rmse:0.30422
-[1626]	validation_0-rmse:0.30425
-[1627]	validation_0-rmse:0.30426
-[1628]	validation_0-rmse:0.30426
-[1629]	validation_0-rmse:0.30423
-[1630]	validation_0-rmse:0.30421
-[1631]	validation_0-rmse:0.30416
-[1632]	validation_0-rmse:0.30413
-[1633]	validation_0-rmse:0.30410
-[1634]	validation_0-rmse:0.30415
-[1635]	validation_0-rmse:0.30415
-[1636]	validation_0-rmse:0.30412
-[1637]	validation_0-rmse:0.30410
-[1638]	validation_0-rmse:0.30405
-[1639]	validation_0-rmse:0.30413
-[1640]	validation_0-rmse:0.30411
-[1641]	validation_0-rmse:0.30413
-[1642]	validation_0-rmse:0.30410
-[1643]	validation_0-rmse:0.30413
-[1644]	validation_0-rmse:0.30412
-[1645]	validation_0-rmse:0.30410
-[1646]	validation_0-rmse:0.30408
-[1647]	validation_0-rmse:0.30413
-[1648]	validation_0-rmse:0.30418
-[1649]	validation_0-rmse:0.30422
-[1650]	validation_0-rmse:0.30428
-[1651]	validation_0-rmse:0.30425
-[1652]	validation_0-rmse:0.30424
-[1653]	validation_0-rmse:0.30428
-[1654]	validation_0-rmse:0.30430
-[1655]	validation_0-rmse:0.30430
-[1656]	validation_0-rmse:0.30430
-[1657]	validation_0-rmse:0.30425
-[1658]	validation_0-rmse:0.30425
-[1659]	validation_0-rmse:0.30422
-[1660]	validation_0-rmse:0.30423
-[1661]	validation_0-rmse:0.30425
-[1662]	validation_0-rmse:0.30429
-[1663]	validation_0-rmse:0.30427
-[1664]	validation_0-rmse:0.30428
-[1665]	validation_0-rmse:0.30427
-[1666]	validation_0-rmse:0.30427
-[1667]	validation_0-rmse:0.30423
-[1668]	validation_0-rmse:0.30423
-[1669]	validation_0-rmse:0.30424
-[1670]	validation_0-rmse:0.30423
-[1671]	validation_0-rmse:0.30429
-[1672]	validation_0-rmse:0.30426
-[1673]	validation_0-rmse:0.30424
-[1674]	validation_0-rmse:0.30425
-[1675]	validation_0-rmse:0.30428
-[1676]	validation_0-rmse:0.30427
-[1677]	validation_0-rmse:0.30424
-[1678]	validation_0-rmse:0.30425
-[1679]	validation_0-rmse:0.30426
-[1680]	validation_0-rmse:0.30422
-[1681]	validation_0-rmse:0.30420
-[1682]	validation_0-rmse:0.30421
-[1683]	validation_0-rmse:0.30426
-[1684]	validation_0-rmse:0.30425
-[1685]	validation_0-rmse:0.30418
-[1686]	validation_0-rmse:0.30415
-[1687]	validation_0-rmse:0.30414
-[1688]	validation_0-rmse:0.30413
-[1689]	validation_0-rmse:0.30414
-[1690]	validation_0-rmse:0.30416
-[1691]	validation_0-rmse:0.30415
-[1692]	validation_0-rmse:0.30417
-[1693]	validation_0-rmse:0.30419
-[1694]	validation_0-rmse:0.30419
-[1695]	validation_0-rmse:0.30420
-[1696]	validation_0-rmse:0.30417
-[1697]	validation_0-rmse:0.30419
-[1698]	validation_0-rmse:0.30415
-[1699]	validation_0-rmse:0.30417
-[1700]	validation_0-rmse:0.30418
-[1701]	validation_0-rmse:0.30417
-[1702]	validation_0-rmse:0.30417
-[1703]	validation_0-rmse:0.30420
-[1704]	validation_0-rmse:0.30420
-[1705]	validation_0-rmse:0.30422
-[1706]	validation_0-rmse:0.30421
-[1707]	validation_0-rmse:0.30418
-[1708]	validation_0-rmse:0.30418
-[1709]	validation_0-rmse:0.30418
-[1710]	validation_0-rmse:0.30416
-[1711]	validation_0-rmse:0.30418
-[1712]	validation_0-rmse:0.30418
-[1713]	validation_0-rmse:0.30417
-[1714]	validation_0-rmse:0.30419
-[1715]	validation_0-rmse:0.30416
-[1716]	validation_0-rmse:0.30419
-[1717]	validation_0-rmse:0.30412
-[1718]	validation_0-rmse:0.30415
-[1719]	validation_0-rmse:0.30415
-[1720]	validation_0-rmse:0.30418
-[1721]	validation_0-rmse:0.30418
-[1722]	validation_0-rmse:0.30418
-[1723]	validation_0-rmse:0.30421
-[1724]	validation_0-rmse:0.30418
-[1725]	validation_0-rmse:0.30415
-[1726]	validation_0-rmse:0.30420
-[1727]	validation_0-rmse:0.30420
-[1728]	validation_0-rmse:0.30415
-[1729]	validation_0-rmse:0.30409
-[1730]	validation_0-rmse:0.30402
-[1731]	validation_0-rmse:0.30401
-[1732]	validation_0-rmse:0.30398
-[1733]	validation_0-rmse:0.30402
-[1734]	validation_0-rmse:0.30399
-[1735]	validation_0-rmse:0.30394
-[1736]	validation_0-rmse:0.30395
-[1737]	validation_0-rmse:0.30394
-[1738]	validation_0-rmse:0.30396
-[1739]	validation_0-rmse:0.30389
-[1740]	validation_0-rmse:0.30389
-[1741]	validation_0-rmse:0.30388
-[1742]	validation_0-rmse:0.30386
-[1743]	validation_0-rmse:0.30386
-[1744]	validation_0-rmse:0.30385
-[1745]	validation_0-rmse:0.30385
-[1746]	validation_0-rmse:0.30390
-[1747]	validation_0-rmse:0.30387
-[1748]	validation_0-rmse:0.30393
-[1749]	validation_0-rmse:0.30390
-[1750]	validation_0-rmse:0.30388
-[1751]	validation_0-rmse:0.30391
-[1752]	validation_0-rmse:0.30390
-[1753]	validation_0-rmse:0.30394
-[1754]	validation_0-rmse:0.30390
-[1755]	validation_0-rmse:0.30388
-[1756]	validation_0-rmse:0.30389
-[1757]	validation_0-rmse:0.30392
-[1758]	validation_0-rmse:0.30390
-[1759]	validation_0-rmse:0.30390
-[1760]	validation_0-rmse:0.30391
-[1761]	validation_0-rmse:0.30391
-[1762]	validation_0-rmse:0.30393
-[1763]	validation_0-rmse:0.30396
-[1764]	validation_0-rmse:0.30395
-[1765]	validation_0-rmse:0.30391
-[1766]	validation_0-rmse:0.30386
-[1767]	validation_0-rmse:0.30384
-[1768]	validation_0-rmse:0.30380
-[1769]	validation_0-rmse:0.30387
-[1770]	validation_0-rmse:0.30390
-[1771]	validation_0-rmse:0.30397
-[1772]	validation_0-rmse:0.30397
-[1773]	validation_0-rmse:0.30390
-[1774]	validation_0-rmse:0.30391
-[1775]	validation_0-rmse:0.30391
-[1776]	validation_0-rmse:0.30393
-[1777]	validation_0-rmse:0.30395
-[1778]	validation_0-rmse:0.30389
-[1779]	validation_0-rmse:0.30392
-[1780]	validation_0-rmse:0.30392
-[1781]	validation_0-rmse:0.30398
-[1782]	validation_0-rmse:0.30397
-[1783]	validation_0-rmse:0.30396
-[1784]	validation_0-rmse:0.30401
-[1785]	validation_0-rmse:0.30402
-[1786]	validation_0-rmse:0.30400
-[1787]	validation_0-rmse:0.30400
-[1788]	validation_0-rmse:0.30400
-[1789]	validation_0-rmse:0.30400
-[1790]	validation_0-rmse:0.30397
-[1791]	validation_0-rmse:0.30399
-[1792]	validation_0-rmse:0.30397
-[1793]	validation_0-rmse:0.30392
-[1794]	validation_0-rmse:0.30387
-[1795]	validation_0-rmse:0.30392
-[1796]	validation_0-rmse:0.30394
-[1797]	validation_0-rmse:0.30387
-[1798]	validation_0-rmse:0.30392
-[1799]	validation_0-rmse:0.30387
-[1800]	validation_0-rmse:0.30384
-[1801]	validation_0-rmse:0.30379
-[1802]	validation_0-rmse:0.30381
-[1803]	validation_0-rmse:0.30388
-[1804]	validation_0-rmse:0.30390
-[1805]	validation_0-rmse:0.30390
-[1806]	validation_0-rmse:0.30389
-[1807]	validation_0-rmse:0.30390
-[1808]	validation_0-rmse:0.30391
-[1809]	validation_0-rmse:0.30395
-[1810]	validation_0-rmse:0.30394
-[1811]	validation_0-rmse:0.30388
-[1812]	validation_0-rmse:0.30390
-[1813]	validation_0-rmse:0.30387
-[1814]	validation_0-rmse:0.30380
-[1815]	validation_0-rmse:0.30369
-[1816]	validation_0-rmse:0.30371
-[1817]	validation_0-rmse:0.30371
-[1818]	validation_0-rmse:0.30372
-[1819]	validation_0-rmse:0.30370
-[1820]	validation_0-rmse:0.30366
-[1821]	validation_0-rmse:0.30366
-[1822]	validation_0-rmse:0.30366
-[1823]	validation_0-rmse:0.30368
-[1824]	validation_0-rmse:0.30370
-[1825]	validation_0-rmse:0.30367
-[1826]	validation_0-rmse:0.30369
-[1827]	validation_0-rmse:0.30363
-[1828]	validation_0-rmse:0.30372
-[1829]	validation_0-rmse:0.30370
-[1830]	validation_0-rmse:0.30367
-[1831]	validation_0-rmse:0.30367
-[1832]	validation_0-rmse:0.30367
-[1833]	validation_0-rmse:0.30365
-[1834]	validation_0-rmse:0.30366
-[1835]	validation_0-rmse:0.30367
-[1836]	validation_0-rmse:0.30365
-[1837]	validation_0-rmse:0.30371
-[1838]	validation_0-rmse:0.30366
-[1839]	validation_0-rmse:0.30369
-[1840]	validation_0-rmse:0.30370
-[1841]	validation_0-rmse:0.30370
-[1842]	validation_0-rmse:0.30365
-[1843]	validation_0-rmse:0.30366
-[1844]	validation_0-rmse:0.30366
-[1845]	validation_0-rmse:0.30368
-[1846]	validation_0-rmse:0.30369
-[1847]	validation_0-rmse:0.30368
-[1848]	validation_0-rmse:0.30372
-[1849]	validation_0-rmse:0.30368
-[1850]	validation_0-rmse:0.30371
-[1851]	validation_0-rmse:0.30365
-[1852]	validation_0-rmse:0.30363
-[1853]	validation_0-rmse:0.30366
-[1854]	validation_0-rmse:0.30368
-[1855]	validation_0-rmse:0.30365
-[1856]	validation_0-rmse:0.30367
-[1857]	validation_0-rmse:0.30363
-[1858]	validation_0-rmse:0.30365
-[1859]	validation_0-rmse:0.30367
-[1860]	validation_0-rmse:0.30365
-[1861]	validation_0-rmse:0.30362
-[1862]	validation_0-rmse:0.30360
-[1863]	validation_0-rmse:0.30359
-[1864]	validation_0-rmse:0.30361
-[1865]	validation_0-rmse:0.30363
-[1866]	validation_0-rmse:0.30358
-[1867]	validation_0-rmse:0.30356
-[1868]	validation_0-rmse:0.30356
-[1869]	validation_0-rmse:0.30355
-[1870]	validation_0-rmse:0.30357
-[1871]	validation_0-rmse:0.30354
-[1872]	validation_0-rmse:0.30355
-[1873]	validation_0-rmse:0.30351
-[1874]	validation_0-rmse:0.30348
-[1875]	validation_0-rmse:0.30345
-[1876]	validation_0-rmse:0.30345
-[1877]	validation_0-rmse:0.30343
-[1878]	validation_0-rmse:0.30336
-[1879]	validation_0-rmse:0.30331
-[1880]	validation_0-rmse:0.30340
-[1881]	validation_0-rmse:0.30335
-[1882]	validation_0-rmse:0.30334
-[1883]	validation_0-rmse:0.30333
-[1884]	validation_0-rmse:0.30332
-[1885]	validation_0-rmse:0.30331
-[1886]	validation_0-rmse:0.30332
-[1887]	validation_0-rmse:0.30331
-[1888]	validation_0-rmse:0.30336
-[1889]	validation_0-rmse:0.30337
-[1890]	validation_0-rmse:0.30338
-[1891]	validation_0-rmse:0.30343
-[1892]	validation_0-rmse:0.30345
-[1893]	validation_0-rmse:0.30345
-[1894]	validation_0-rmse:0.30347
-[1895]	validation_0-rmse:0.30359
-[1896]	validation_0-rmse:0.30361
-[1897]	validation_0-rmse:0.30362
-[1898]	validation_0-rmse:0.30363
-[1899]	validation_0-rmse:0.30362
-[1900]	validation_0-rmse:0.30359
-[1901]	validation_0-rmse:0.30360
-[1902]	validation_0-rmse:0.30361
-[1903]	validation_0-rmse:0.30363
-[1904]	validation_0-rmse:0.30361
-[1905]	validation_0-rmse:0.30355
-[1906]	validation_0-rmse:0.30361
-[1907]	validation_0-rmse:0.30359
-[1908]	validation_0-rmse:0.30356
-[1909]	validation_0-rmse:0.30355
-[1910]	validation_0-rmse:0.30349
-[1911]	validation_0-rmse:0.30348
-[1912]	validation_0-rmse:0.30350
-[1913]	validation_0-rmse:0.30349
-[1914]	validation_0-rmse:0.30349
-[1915]	validation_0-rmse:0.30350
-[1916]	validation_0-rmse:0.30349
-[1917]	validation_0-rmse:0.30350
-[1918]	validation_0-rmse:0.30344
-[1919]	validation_0-rmse:0.30343
-[1920]	validation_0-rmse:0.30341
-[1921]	validation_0-rmse:0.30344
-[1922]	validation_0-rmse:0.30342
-[1923]	validation_0-rmse:0.30338
-[1924]	validation_0-rmse:0.30338
-   Model trained with 1925 estimators
-
-6. Evaluating on test set...
-   Test R²: 0.6361
-   Test MAE: 0.2543
-   Test RMSE: 0.4027
-   Test Pearson r: 0.7978 (p=3.69e-138)
-   Test Spearman ρ: 0.8421 (p=3.88e-168)
-
-7. Cross-validation evaluation...
-  Fold 1/5: R²=0.7671, MAE=0.2177, RMSE=0.3016, Pearson r=0.8764, Spearman ρ=0.8637
-  Fold 2/5: R²=0.7201, MAE=0.2315, RMSE=0.3614, Pearson r=0.8504, Spearman ρ=0.8777
-  Fold 3/5: R²=0.7213, MAE=0.2173, RMSE=0.3385, Pearson r=0.8500, Spearman ρ=0.8705
-  Fold 4/5: R²=0.7386, MAE=0.2263, RMSE=0.3316, Pearson r=0.8628, Spearman ρ=0.8569
-  Fold 5/5: R²=0.7873, MAE=0.2053, RMSE=0.2874, Pearson r=0.8881, Spearman ρ=0.8828
-
-   CV Results:
-     R²: 0.7469 ± 0.0264
-     MAE: 0.2196 ± 0.0089
-     RMSE: 0.3241 ± 0.0265
-     Pearson r: 0.8655 ± 0.0149
-     Spearman ρ: 0.8703 ± 0.0093
-
-8. Extracting feature importance...
-   Feature importance saved to peptide_full_results/feature_importance.csv
-
-   Top 10 features:
-     morgan_446: 26.7170
-     map4_536: 17.2304
-     morgan_481: 16.7457
-     morgan_1951: 16.1253
-     morgan_1163: 14.4969
-     map4_730: 13.2794
-     morgan_523: 13.1049
-     morgan_1139: 11.4025
-     rdkit_1267: 10.4069
-     morgan_497: 10.2067
-
-9. Saving model...
-Model saved to peptide_full_results/best_model.pkl
-
-10. Saving results...
-   Results saved to peptide_full_results/training_results.json
-
-================================================================================
-Training Complete!
-================================================================================
-
-Best hyperparameters: peptide_full_results/best_hyperparameters.json
-Model: peptide_full_results/best_model.pkl
-Results: peptide_full_results/training_results.json
-Feature importance: peptide_full_results/feature_importance.csv
-
-Final Performance:
-  Test R²: 0.6361
-  Test Pearson r: 0.7978
-  Test Spearman ρ: 0.8421
-  Test RMSE: 0.4027
-  CV R²: 0.7469 ± 0.0264
-  CV Pearson r: 0.8655 ± 0.0149
-  CV Spearman ρ: 0.8703 ± 0.0093
-  CV RMSE: 0.3241 ± 0.0265
-================================================================================
-[I 2026-02-02 15:31:32,064] A new study created in memory with name: xgboost_optuna
-  0%|          | 0/50 [00:00<?, ?it/s]                                        0%|          | 0/50 [00:52<?, ?it/s]Best trial: 0. Best value: 0.670557:   0%|          | 0/50 [00:52<?, ?it/s]Best trial: 0. Best value: 0.670557:   2%|▏         | 1/50 [00:52<43:03, 52.73s/it]                                                                                   Best trial: 0. Best value: 0.670557:   2%|▏         | 1/50 [02:06<43:03, 52.73s/it]Best trial: 1. Best value: 0.718253:   2%|▏         | 1/50 [02:06<43:03, 52.73s/it]Best trial: 1. Best value: 0.718253:   4%|▍         | 2/50 [02:06<52:09, 65.19s/it]                                                                                   Best trial: 1. Best value: 0.718253:   4%|▍         | 2/50 [02:58<52:09, 65.19s/it]Best trial: 1. Best value: 0.718253:   4%|▍         | 2/50 [02:58<52:09, 65.19s/it]Best trial: 1. Best value: 0.718253:   6%|▌         | 3/50 [02:58<46:07, 58.89s/it]                                                                                   Best trial: 1. Best value: 0.718253:   6%|▌         | 3/50 [04:07<46:07, 58.89s/it]Best trial: 1. Best value: 0.718253:   6%|▌         | 3/50 [04:07<46:07, 58.89s/it]Best trial: 1. Best value: 0.718253:   8%|▊         | 4/50 [04:07<48:17, 63.00s/it]                                                                                   Best trial: 1. Best value: 0.718253:   8%|▊         | 4/50 [04:49<48:17, 63.00s/it]Best trial: 4. Best value: 0.73584:   8%|▊         | 4/50 [04:49<48:17, 63.00s/it] Best trial: 4. Best value: 0.73584:  10%|█         | 5/50 [04:49<41:42, 55.62s/it]                                                                                  Best trial: 4. Best value: 0.73584:  10%|█         | 5/50 [06:01<41:42, 55.62s/it]Best trial: 4. Best value: 0.73584:  10%|█         | 5/50 [06:01<41:42, 55.62s/it]Best trial: 4. Best value: 0.73584:  12%|█▏        | 6/50 [06:01<44:42, 60.97s/it]                                                                                  Best trial: 4. Best value: 0.73584:  12%|█▏        | 6/50 [07:23<44:42, 60.97s/it]Best trial: 4. Best value: 0.73584:  12%|█▏        | 6/50 [07:23<44:42, 60.97s/it]Best trial: 4. Best value: 0.73584:  14%|█▍        | 7/50 [07:23<48:46, 68.06s/it]                                                                                  Best trial: 4. Best value: 0.73584:  14%|█▍        | 7/50 [08:08<48:46, 68.06s/it]Best trial: 4. Best value: 0.73584:  14%|█▍        | 7/50 [08:08<48:46, 68.06s/it]Best trial: 4. Best value: 0.73584:  16%|█▌        | 8/50 [08:08<42:29, 60.70s/it]                                                                                  Best trial: 4. Best value: 0.73584:  16%|█▌        | 8/50 [08:19<42:29, 60.70s/it]Best trial: 4. Best value: 0.73584:  16%|█▌        | 8/50 [08:19<42:29, 60.70s/it]Best trial: 4. Best value: 0.73584:  18%|█▊        | 9/50 [08:19<30:52, 45.19s/it]                                                                                  Best trial: 4. Best value: 0.73584:  18%|█▊        | 9/50 [09:40<30:52, 45.19s/it]Best trial: 4. Best value: 0.73584:  18%|█▊        | 9/50 [09:40<30:52, 45.19s/it]Best trial: 4. Best value: 0.73584:  20%|██        | 10/50 [09:40<37:20, 56.01s/it]                                                                                   Best trial: 4. Best value: 0.73584:  20%|██        | 10/50 [11:35<37:20, 56.01s/it]Best trial: 10. Best value: 0.741889:  20%|██        | 10/50 [11:35<37:20, 56.01s/it]Best trial: 10. Best value: 0.741889:  22%|██▏       | 11/50 [11:35<48:08, 74.05s/it]                                                                                     Best trial: 10. Best value: 0.741889:  22%|██▏       | 11/50 [13:34<48:08, 74.05s/it]Best trial: 11. Best value: 0.743374:  22%|██▏       | 11/50 [13:34<48:08, 74.05s/it]Best trial: 11. Best value: 0.743374:  24%|██▍       | 12/50 [13:34<55:38, 87.84s/it]                                                                                     Best trial: 11. Best value: 0.743374:  24%|██▍       | 12/50 [15:29<55:38, 87.84s/it]Best trial: 11. Best value: 0.743374:  24%|██▍       | 12/50 [15:29<55:38, 87.84s/it]Best trial: 11. Best value: 0.743374:  26%|██▌       | 13/50 [15:29<59:16, 96.13s/it]                                                                                     Best trial: 11. Best value: 0.743374:  26%|██▌       | 13/50 [17:26<59:16, 96.13s/it]Best trial: 11. Best value: 0.743374:  26%|██▌       | 13/50 [17:26<59:16, 96.13s/it]Best trial: 11. Best value: 0.743374:  28%|██▊       | 14/50 [17:26<1:01:21, 102.27s/it]                                                                                        Best trial: 11. Best value: 0.743374:  28%|██▊       | 14/50 [19:02<1:01:21, 102.27s/it]Best trial: 11. Best value: 0.743374:  28%|██▊       | 14/50 [19:02<1:01:21, 102.27s/it]Best trial: 11. Best value: 0.743374:  30%|███       | 15/50 [19:02<58:33, 100.40s/it]                                                                                        Best trial: 11. Best value: 0.743374:  30%|███       | 15/50 [20:44<58:33, 100.40s/it]Best trial: 11. Best value: 0.743374:  30%|███       | 15/50 [20:44<58:33, 100.40s/it]Best trial: 11. Best value: 0.743374:  32%|███▏      | 16/50 [20:44<57:16, 101.07s/it]                                                                                      Best trial: 11. Best value: 0.743374:  32%|███▏      | 16/50 [22:18<57:16, 101.07s/it]Best trial: 11. Best value: 0.743374:  32%|███▏      | 16/50 [22:18<57:16, 101.07s/it]Best trial: 11. Best value: 0.743374:  34%|███▍      | 17/50 [22:18<54:18, 98.76s/it]                                                                                      Best trial: 11. Best value: 0.743374:  34%|███▍      | 17/50 [23:01<54:18, 98.76s/it]Best trial: 11. Best value: 0.743374:  34%|███▍      | 17/50 [23:01<54:18, 98.76s/it]Best trial: 11. Best value: 0.743374:  36%|███▌      | 18/50 [23:01<43:43, 82.00s/it]                                                                                     Best trial: 11. Best value: 0.743374:  36%|███▌      | 18/50 [24:55<43:43, 82.00s/it]Best trial: 11. Best value: 0.743374:  36%|███▌      | 18/50 [24:55<43:43, 82.00s/it]Best trial: 11. Best value: 0.743374:  38%|███▊      | 19/50 [24:55<47:20, 91.62s/it]                                                                                     Best trial: 11. Best value: 0.743374:  38%|███▊      | 19/50 [26:23<47:20, 91.62s/it]Best trial: 11. Best value: 0.743374:  38%|███▊      | 19/50 [26:23<47:20, 91.62s/it]Best trial: 11. Best value: 0.743374:  40%|████      | 20/50 [26:23<45:15, 90.51s/it]                                                                                     Best trial: 11. Best value: 0.743374:  40%|████      | 20/50 [28:01<45:15, 90.51s/it]Best trial: 11. Best value: 0.743374:  40%|████      | 20/50 [28:01<45:15, 90.51s/it]Best trial: 11. Best value: 0.743374:  42%|████▏     | 21/50 [28:01<44:48, 92.72s/it]                                                                                     Best trial: 11. Best value: 0.743374:  42%|████▏     | 21/50 [30:00<44:48, 92.72s/it]Best trial: 11. Best value: 0.743374:  42%|████▏     | 21/50 [30:00<44:48, 92.72s/it]Best trial: 11. Best value: 0.743374:  44%|████▍     | 22/50 [30:00<46:57, 100.64s/it]                                                                                      Best trial: 11. Best value: 0.743374:  44%|████▍     | 22/50 [32:10<46:57, 100.64s/it]Best trial: 11. Best value: 0.743374:  44%|████▍     | 22/50 [32:10<46:57, 100.64s/it]Best trial: 11. Best value: 0.743374:  46%|████▌     | 23/50 [32:10<49:16, 109.51s/it]                                                                                      Best trial: 11. Best value: 0.743374:  46%|████▌     | 23/50 [33:46<49:16, 109.51s/it]Best trial: 11. Best value: 0.743374:  46%|████▌     | 23/50 [33:46<49:16, 109.51s/it]Best trial: 11. Best value: 0.743374:  48%|████▊     | 24/50 [33:46<45:44, 105.56s/it]                                                                                      Best trial: 11. Best value: 0.743374:  48%|████▊     | 24/50 [35:43<45:44, 105.56s/it]Best trial: 11. Best value: 0.743374:  48%|████▊     | 24/50 [35:43<45:44, 105.56s/it]Best trial: 11. Best value: 0.743374:  50%|█████     | 25/50 [35:43<45:21, 108.87s/it]                                                                                      Best trial: 11. Best value: 0.743374:  50%|█████     | 25/50 [37:35<45:21, 108.87s/it]Best trial: 11. Best value: 0.743374:  50%|█████     | 25/50 [37:35<45:21, 108.87s/it]Best trial: 11. Best value: 0.743374:  52%|█████▏    | 26/50 [37:35<43:57, 109.91s/it]                                                                                      Best trial: 11. Best value: 0.743374:  52%|█████▏    | 26/50 [39:19<43:57, 109.91s/it]Best trial: 11. Best value: 0.743374:  52%|█████▏    | 26/50 [39:19<43:57, 109.91s/it]Best trial: 11. Best value: 0.743374:  54%|█████▍    | 27/50 [39:19<41:27, 108.16s/it]                                                                                      Best trial: 11. Best value: 0.743374:  54%|█████▍    | 27/50 [40:59<41:27, 108.16s/it]Best trial: 11. Best value: 0.743374:  54%|█████▍    | 27/50 [40:59<41:27, 108.16s/it]Best trial: 11. Best value: 0.743374:  56%|█████▌    | 28/50 [40:59<38:46, 105.75s/it]                                                                                      Best trial: 11. Best value: 0.743374:  56%|█████▌    | 28/50 [41:30<38:46, 105.75s/it]Best trial: 11. Best value: 0.743374:  56%|█████▌    | 28/50 [41:30<38:46, 105.75s/it]Best trial: 11. Best value: 0.743374:  58%|█████▊    | 29/50 [41:30<29:06, 83.18s/it]                                                                                      Best trial: 11. Best value: 0.743374:  58%|█████▊    | 29/50 [42:40<29:06, 83.18s/it]Best trial: 11. Best value: 0.743374:  58%|█████▊    | 29/50 [42:40<29:06, 83.18s/it]Best trial: 11. Best value: 0.743374:  60%|██████    | 30/50 [42:40<26:27, 79.38s/it]                                                                                     Best trial: 11. Best value: 0.743374:  60%|██████    | 30/50 [44:26<26:27, 79.38s/it]Best trial: 11. Best value: 0.743374:  60%|██████    | 30/50 [44:26<26:27, 79.38s/it]Best trial: 11. Best value: 0.743374:  62%|██████▏   | 31/50 [44:26<27:36, 87.17s/it]                                                                                     Best trial: 11. Best value: 0.743374:  62%|██████▏   | 31/50 [46:18<27:36, 87.17s/it]Best trial: 31. Best value: 0.744798:  62%|██████▏   | 31/50 [46:18<27:36, 87.17s/it]Best trial: 31. Best value: 0.744798:  64%|██████▍   | 32/50 [46:18<28:22, 94.57s/it]                                                                                     Best trial: 31. Best value: 0.744798:  64%|██████▍   | 32/50 [48:12<28:22, 94.57s/it]Best trial: 31. Best value: 0.744798:  64%|██████▍   | 32/50 [48:12<28:22, 94.57s/it]Best trial: 31. Best value: 0.744798:  66%|██████▌   | 33/50 [48:12<28:30, 100.59s/it]                                                                                      Best trial: 31. Best value: 0.744798:  66%|██████▌   | 33/50 [49:59<28:30, 100.59s/it]Best trial: 31. Best value: 0.744798:  66%|██████▌   | 33/50 [49:59<28:30, 100.59s/it]Best trial: 31. Best value: 0.744798:  68%|██████▊   | 34/50 [49:59<27:17, 102.31s/it]                                                                                      Best trial: 31. Best value: 0.744798:  68%|██████▊   | 34/50 [51:44<27:17, 102.31s/it]Best trial: 31. Best value: 0.744798:  68%|██████▊   | 34/50 [51:44<27:17, 102.31s/it]Best trial: 31. Best value: 0.744798:  70%|███████   | 35/50 [51:44<25:48, 103.22s/it]                                                                                      Best trial: 31. Best value: 0.744798:  70%|███████   | 35/50 [53:17<25:48, 103.22s/it]Best trial: 31. Best value: 0.744798:  70%|███████   | 35/50 [53:17<25:48, 103.22s/it]Best trial: 31. Best value: 0.744798:  72%|███████▏  | 36/50 [53:17<23:23, 100.25s/it]                                                                                      Best trial: 31. Best value: 0.744798:  72%|███████▏  | 36/50 [54:16<23:23, 100.25s/it]Best trial: 31. Best value: 0.744798:  72%|███████▏  | 36/50 [54:16<23:23, 100.25s/it]Best trial: 31. Best value: 0.744798:  74%|███████▍  | 37/50 [54:16<19:01, 87.77s/it]                                                                                      Best trial: 31. Best value: 0.744798:  74%|███████▍  | 37/50 [55:59<19:01, 87.77s/it]Best trial: 31. Best value: 0.744798:  74%|███████▍  | 37/50 [55:59<19:01, 87.77s/it]Best trial: 31. Best value: 0.744798:  76%|███████▌  | 38/50 [55:59<18:29, 92.42s/it]                                                                                     Best trial: 31. Best value: 0.744798:  76%|███████▌  | 38/50 [57:29<18:29, 92.42s/it]Best trial: 31. Best value: 0.744798:  76%|███████▌  | 38/50 [57:29<18:29, 92.42s/it]Best trial: 31. Best value: 0.744798:  78%|███████▊  | 39/50 [57:29<16:47, 91.63s/it]                                                                                     Best trial: 31. Best value: 0.744798:  78%|███████▊  | 39/50 [58:58<16:47, 91.63s/it]Best trial: 31. Best value: 0.744798:  78%|███████▊  | 39/50 [58:58<16:47, 91.63s/it]Best trial: 31. Best value: 0.744798:  80%|████████  | 40/50 [58:58<15:08, 90.84s/it]                                                                                     Best trial: 31. Best value: 0.744798:  80%|████████  | 40/50 [1:00:12<15:08, 90.84s/it]Best trial: 31. Best value: 0.744798:  80%|████████  | 40/50 [1:00:12<15:08, 90.84s/it]Best trial: 31. Best value: 0.744798:  82%|████████▏ | 41/50 [1:00:12<12:52, 85.84s/it]                                                                                       Best trial: 31. Best value: 0.744798:  82%|████████▏ | 41/50 [1:02:11<12:52, 85.84s/it]Best trial: 41. Best value: 0.746094:  82%|████████▏ | 41/50 [1:02:11<12:52, 85.84s/it]Best trial: 41. Best value: 0.746094:  84%|████████▍ | 42/50 [1:02:11<12:47, 95.89s/it]                                                                                       Best trial: 41. Best value: 0.746094:  84%|████████▍ | 42/50 [1:04:13<12:47, 95.89s/it]Best trial: 41. Best value: 0.746094:  84%|████████▍ | 42/50 [1:04:13<12:47, 95.89s/it]Best trial: 41. Best value: 0.746094:  86%|████████▌ | 43/50 [1:04:13<12:05, 103.58s/it]                                                                                        Best trial: 41. Best value: 0.746094:  86%|████████▌ | 43/50 [1:05:54<12:05, 103.58s/it]Best trial: 41. Best value: 0.746094:  86%|████████▌ | 43/50 [1:05:54<12:05, 103.58s/it]Best trial: 41. Best value: 0.746094:  88%|████████▊ | 44/50 [1:05:54<10:16, 102.73s/it]                                                                                        Best trial: 41. Best value: 0.746094:  88%|████████▊ | 44/50 [1:07:41<10:16, 102.73s/it]Best trial: 41. Best value: 0.746094:  88%|████████▊ | 44/50 [1:07:41<10:16, 102.73s/it]Best trial: 41. Best value: 0.746094:  90%|█████████ | 45/50 [1:07:41<08:40, 104.06s/it]                                                                                        Best trial: 41. Best value: 0.746094:  90%|█████████ | 45/50 [1:09:11<08:40, 104.06s/it]Best trial: 41. Best value: 0.746094:  90%|█████████ | 45/50 [1:09:11<08:40, 104.06s/it]Best trial: 41. Best value: 0.746094:  92%|█████████▏| 46/50 [1:09:11<06:39, 99.95s/it]                                                                                        Best trial: 41. Best value: 0.746094:  92%|█████████▏| 46/50 [1:10:32<06:39, 99.95s/it]Best trial: 41. Best value: 0.746094:  92%|█████████▏| 46/50 [1:10:32<06:39, 99.95s/it]Best trial: 41. Best value: 0.746094:  94%|█████████▍| 47/50 [1:10:32<04:42, 94.25s/it]                                                                                       Best trial: 41. Best value: 0.746094:  94%|█████████▍| 47/50 [1:12:20<04:42, 94.25s/it]Best trial: 41. Best value: 0.746094:  94%|█████████▍| 47/50 [1:12:20<04:42, 94.25s/it]Best trial: 41. Best value: 0.746094:  96%|█████████▌| 48/50 [1:12:20<03:16, 98.40s/it]                                                                                       Best trial: 41. Best value: 0.746094:  96%|█████████▌| 48/50 [1:13:56<03:16, 98.40s/it]Best trial: 41. Best value: 0.746094:  96%|█████████▌| 48/50 [1:13:56<03:16, 98.40s/it]Best trial: 41. Best value: 0.746094:  98%|█████████▊| 49/50 [1:13:56<01:37, 97.70s/it]                                                                                       Best trial: 41. Best value: 0.746094:  98%|█████████▊| 49/50 [1:15:37<01:37, 97.70s/it]Best trial: 41. Best value: 0.746094:  98%|█████████▊| 49/50 [1:15:37<01:37, 97.70s/it]Best trial: 41. Best value: 0.746094: 100%|██████████| 50/50 [1:15:37<00:00, 98.56s/it]Best trial: 41. Best value: 0.746094: 100%|██████████| 50/50 [1:15:37<00:00, 90.75s/it]
-
-
